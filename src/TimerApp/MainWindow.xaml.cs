@@ -134,6 +134,87 @@ public partial class MainWindow : Window
         AutostartService.SetEnabled(AutostartSwitch.IsChecked == true);
     }
 
+    private void OnUninstallAppClick(object sender, RoutedEventArgs e)
+    {
+        var confirm = new ConfirmWindow(
+            LocalizationService.Get("L_ConfirmTitle"),
+            LocalizationService.Get("L_UninstallWarning"),
+            dangerButton: true) { Owner = this };
+        if (confirm.ShowDialog() != true) return;
+
+        bool success = UninstallCleanup();
+        if (!success) return;
+
+        // Topmost "removed" overlay: closes on any click/keypress.
+        var overlay = new Windows.UninstallDoneWindow(
+            "STM",
+            LocalizationService.Get("L_UninstallDoneText"),
+            LocalizationService.Get("L_UninstallDoneSub"));
+        overlay.ShowDialog();
+
+        // Program dir is locked by this exe — schedule the detached cleanup now.
+        ScheduleProgramDirCleanup();
+        _realExit = true;
+        Close();
+    }
+
+    private bool UninstallCleanup()
+    {
+        const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
+        const string ShortcutName = "STM — Sirko Time Manager.lnk";
+        bool ok = true;
+
+        try
+        {
+            using var runKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKeyPath, writable: true);
+            runKey?.DeleteValue("TimerApp", false);
+        }
+        catch { ok = false; }
+
+        try
+        {
+            string desktop = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), ShortcutName);
+            if (File.Exists(desktop)) File.Delete(desktop);
+
+            string menu = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+                "Programs", ShortcutName);
+            if (File.Exists(menu)) File.Delete(menu);
+        }
+        catch { ok = false; }
+
+        try
+        {
+            string dataDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TimerApp");
+            if (Directory.Exists(dataDir))
+                Directory.Delete(dataDir, recursive: true);
+        }
+        catch { ok = false; }
+
+        return ok;
+    }
+
+    private void ScheduleProgramDirCleanup()
+    {
+        try
+        {
+            string exePath = Environment.ProcessPath ?? string.Empty;
+            string dir = Path.GetDirectoryName(exePath);
+            if (string.IsNullOrEmpty(dir) || !Directory.Exists(dir)) return;
+
+            string cmd = $"/c timeout /t 2 /nobreak > nul & rmdir /s /q \"{dir}\"";
+            Process.Start(new ProcessStartInfo("cmd.exe", cmd)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
+            });
+        }
+        catch { /* best-effort */ }
+    }
+
     private void OnAppearanceChanged()
     {
         ApplyTitleBarTheme();
@@ -382,7 +463,9 @@ public partial class MainWindow : Window
         ScheduleModeShutdown.IsChecked == true ? PowerAction.Shutdown : PowerAction.Sleep;
 
     private static string ModeName(PowerAction mode) =>
-        LocalizationService.Get(mode == PowerAction.Shutdown ? "L_ModeShutdown" : "L_ModeSleep");
+        LocalizationService.Get(mode == PowerAction.Shutdown ? "L_ModeShutdown"
+            : mode == PowerAction.Sleep ? "L_ModeSleep"
+            : "L_ModeNone");
 
     private void OnScheduleClick(object sender, RoutedEventArgs e)
     {
@@ -426,7 +509,11 @@ public partial class MainWindow : Window
         }
     }
 
-    private void OnScheduleCompleted() => SystemActions.Execute(_scheduleMode);
+    private void OnScheduleCompleted()
+    {
+        if (_scheduleMode == PowerAction.None) return;
+        SystemActions.Execute(_scheduleMode);
+    }
 
     private void OnScheduleSaveCurrentClick(object sender, RoutedEventArgs e)
     {
@@ -1233,6 +1320,8 @@ public partial class MainWindow : Window
         Dial.Hours = 0;
         Dial.Minutes = 0;
         Dial.InvalidateVisual();
+
+        if (_mode == PowerAction.None) return;
 
         // Act immediately: no confirmation dialog.
         SystemActions.Execute(_mode);

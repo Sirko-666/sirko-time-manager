@@ -59,16 +59,12 @@
                             <TextBlock x:Name="Step4Text" Foreground="{DynamicResource InkBrush}" FontSize="12" />
                         </Border>
                     </StackPanel>
-                    <Button Content="{DynamicResource L_Cancel}"
-                            Style="{StaticResource GhostButtonStyle}"
-                            HorizontalAlignment="Right" VerticalAlignment="Top"
-                            Click="OnCancelClick" />
                 </Grid>
 
             <!-- Pages -->
             <Grid Grid.Row="1" Margin="34,10,34,8">
 
-                <!-- Page 1: welcome -->
+                 <!-- Page 1: welcome -->
                 <StackPanel x:Name="PageWelcome" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Image Source="icon.png" Width="84" Height="84" HorizontalAlignment="Center" />
                     <TextBlock Text="Sirko Time Manager"
@@ -142,7 +138,7 @@
                     <StackPanel Orientation="Horizontal" Margin="4,12,0,0">
                         <ToggleButton x:Name="OptAutostartSwitch"
                                       Style="{StaticResource SwitchStyle}"
-                                      VerticalAlignment="Center" />
+                                      IsChecked="True" VerticalAlignment="Center" />
                         <TextBlock Text="{DynamicResource L_OptAutostart}"
                                    Foreground="{DynamicResource InkBrush}"
                                    FontSize="13" VerticalAlignment="Center" Margin="12,0,0,0" />
@@ -187,13 +183,18 @@
 
             <!-- Footer -->
             <Grid Grid.Row="2" Margin="20,0,20,16">
-                <Button Content="{DynamicResource L_Cancel}"
+                <Button Content="{DynamicResource L_InstallerUninstall}"
                         Style="{StaticResource GhostButtonStyle}"
-                        HorizontalAlignment="Left" Click="OnCancelClick" />
+                        Foreground="{DynamicResource DangerBrush}"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Click="OnInstallerUninstallClick" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button x:Name="BackButton" Content="{DynamicResource L_Back}"
                             Style="{StaticResource GhostButtonStyle}"
                             Click="OnBackClick" />
+                    <Button Content="{DynamicResource L_Cancel}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Margin="8,0,0,0" Click="OnCancelClick" />
                     <Button x:Name="NextButton" Content="{DynamicResource L_InstallerStart}"
                             Style="{StaticResource PrimaryButtonStyle}"
                             Margin="8,0,0,0" Click="OnNextClick" />

@@ -40,7 +40,32 @@ public partial class InstallerWindow : Window
 
         MouseLeftButtonDown += (_, _) => DragMove();
         ApplyTexts();
+
+        // Elevated relaunch: prefilled install folder, land on the options page.
+        _prefilledDir = Args.GetPrefilledDirectory();
+        if (_prefilledDir is not null)
+        {
+            PathBox.Text = _prefilledDir;
+            _step = 2;
+        }
+
         UpdateStep();
+    }
+
+    private string? _prefilledDir;
+
+    private static class Args
+    {
+        public static string? GetPrefilledDirectory()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length - 1; i++)
+            {
+                if (args[i].Equals("--dir", StringComparison.OrdinalIgnoreCase))
+                    return args[i + 1].Trim('"');
+            }
+            return null;
+        }
     }
 
     private static string T(string key) =>
@@ -204,10 +229,50 @@ public partial class InstallerWindow : Window
 
     private void ReadOptions()
     {
-        _targetDir = PathBox.Text.Trim();
+        _targetDir = PathBox.Text.Trim().Trim('"');
         _desktopShortcut = OptDesktopSwitch.IsChecked == true;
         _startMenuShortcut = OptStartMenuSwitch.IsChecked == true;
         _autostart = OptAutostartSwitch.IsChecked == true;
+    }
+
+    /// <summary>Checks that the current user can write into the target folder.</summary>
+    private static bool CanWriteTo(string dir)
+    {
+        try
+        {
+            Directory.CreateDirectory(dir);
+            string probe = Path.Combine(dir, ".stm-probe");
+            File.WriteAllText(probe, "ok");
+            File.Delete(probe);
+            return true;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>Relaunches the installer with admin rights, handing over the chosen folder.</summary>
+    private void LaunchElevated(string dir)
+    {
+        var psi = new ProcessStartInfo
+        {
+            FileName = System.Reflection.Assembly.GetExecutingAssembly().Location is { Length: > 0 } self
+                ? self
+                : Environment.ProcessPath!,
+            Arguments = $"--dir \"{dir}\"",
+            UseShellExecute = true,
+            Verb = "runas"
+        };
+        try
+        {
+            Process.Start(psi);
+            Close();
+        }
+        catch
+        {
+            // User declined UAC: stay open, let them pick another folder.
+        }
     }
 
     private string[] InstallSteps() =>
@@ -235,9 +300,21 @@ public partial class InstallerWindow : Window
 
             _installTimer.Stop();
             InstallBar.Value = 100;
-            InstallLog.Text = _installError is null
-                ? T("L_InstallOk")
-                : string.Format(T("L_InstallFailed"), _installError);
+
+            if (_installError is not null)
+            {
+                // Failed install: stay on the progress page with the reason
+                // and a retry button instead of pretending everything is fine.
+                InstallLog.Text = string.Format(T("L_InstallFailed"), _installError);
+                NextButton.Content = T("L_Retry");
+                NextButton.Visibility = System.Windows.Visibility.Visible;
+                NextButton.IsEnabled = true;
+                BackButton.Visibility = System.Windows.Visibility.Visible;
+                BackButton.IsEnabled = true;
+                return;
+            }
+
+            InstallLog.Text = T("L_InstallOk");
             _step = 4;
             UpdateStep();
             return;
@@ -267,18 +344,40 @@ public partial class InstallerWindow : Window
                 ReadOptions();
                 if (string.IsNullOrWhiteSpace(_targetDir))
                 {
-                    InstallLog.Visibility = System.Windows.Visibility.Visible;
                     InstallLog.Text = T("L_InvalidDir");
                     return;
                 }
+
+                // Protected folders (Program Files etc.) need admin rights:
+                // relaunch elevated, handing over the chosen directory.
+                if (!CanWriteTo(_targetDir))
+                {
+                    LaunchElevated(_targetDir);
+                    return;
+                }
+
                 _step = 3;
-                InstallBar.Value = 0;
                 InstallLog.Text = T("L_LogCopy");
                 BackButton.Visibility = System.Windows.Visibility.Hidden;
                 NextButton.IsEnabled = false;
                 NextButton.Visibility = System.Windows.Visibility.Hidden;
                 _installTask = Task.Run(DoInstall);
                 _installTimer.Start();
+                return;
+
+            case 3:
+                // Post-error retry: the install task failed, try again.
+                if (_installError is not null)
+                {
+                    _installError = null;
+                    InstallBar.Value = 0;
+                    InstallLog.Text = T("L_LogCopy");
+                    BackButton.Visibility = System.Windows.Visibility.Hidden;
+                    NextButton.IsEnabled = false;
+                    NextButton.Visibility = System.Windows.Visibility.Hidden;
+                    _installTask = Task.Run(DoInstall);
+                    _installTimer.Start();
+                }
                 return;
 
             case 4:
@@ -360,4 +459,177 @@ public partial class InstallerWindow : Window
     }
 
     private void OnCancelClick(object sender, RoutedEventArgs e) => Close();
+
+    // -------- Uninstall (matching the app's Settings flow) --------
+
+    private void OnInstallerUninstallClick(object sender, RoutedEventArgs e)
+    {
+        string? installDir = ResolveInstalledDir();
+        string? exe = installDir is null ? null : Path.Combine(installDir, "TimerApp.exe");
+
+        if (exe is null || !File.Exists(exe))
+        {
+            InstallLog.Text = T("L_UninstallNotFound");
+            return;
+        }
+
+        var confirm = new Windows.UninstallConfirmWindow(
+            T("L_ConfirmTitle"),
+            T("L_InstallerUninstallWarning")) { Owner = this };
+        if (confirm.ShowDialog() != true) return;
+
+        // 1. Stop the app if it is running (close request then hard kill).
+        foreach (var process in System.Diagnostics.Process.GetProcessesByName("TimerApp"))
+        {
+            try
+            {
+                process.CloseMainWindow();
+                process.WaitForExit(500);
+                if (!process.HasExited)
+                    process.Kill(entireProcessTree: true);
+            }
+            finally { process.Dispose(); }
+        }
+
+        // 2. Autostart registry entry.
+        try
+        {
+            Microsoft.Win32.RegistryKey? runKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                @"Software\Microsoft\Windows\CurrentVersion\Run", writable: true);
+            runKey?.DeleteValue("TimerApp", false);
+            runKey?.Dispose();
+        }
+        catch { /* best-effort */ }
+
+        // 3. Shortcuts.
+        try
+        {
+            string link = "STM — Sirko Time Manager.lnk";
+            string desktop = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), link);
+            if (File.Exists(desktop)) File.Delete(desktop);
+            string menu = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+                "Programs", link);
+            if (File.Exists(menu)) File.Delete(menu);
+        }
+        catch { /* best-effort */ }
+
+        // 4. Data + program directory. A freshly killed exe can stay locked
+        // for a moment, so failures fall back to a detached delayed cleanup —
+        // the done-overlay must always appear.
+        System.Threading.Thread.Sleep(300);
+        try
+        {
+            string dataDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TimerApp");
+            if (Directory.Exists(dataDir))
+                Directory.Delete(dataDir, recursive: true);
+        }
+        catch
+        {
+            ScheduleDetachedCleanup(Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TimerApp"));
+        }
+
+        bool dirGone = false;
+        if (Directory.Exists(installDir))
+        {
+            try
+            {
+                Directory.Delete(installDir, recursive: true);
+                dirGone = true;
+            }
+            catch
+            {
+                ScheduleDetachedCleanup(installDir);
+            }
+        }
+        else
+        {
+            dirGone = true;
+        }
+        _ = dirGone;
+
+        try
+        {
+            // Topmost "removed" overlay: closes on any click/keypress.
+            var done = new Windows.UninstallDoneWindow(
+                "STM",
+                T("L_UninstallDone"),
+                T("L_UninstallDoneSub"));
+            done.ShowDialog();
+
+            InstallLog.Text = T("L_UninstallDone");
+        }
+        catch (Exception ex)
+        {
+            InstallLog.Text = string.Format(T("L_InstallFailed"), ex.Message);
+        }
+    }
+
+    private void ScheduleDetachedCleanup(string dir)
+    {
+        try
+        {
+            string cmd = $"/c timeout /t 2 /nobreak > nul & rmdir /s /q \"{dir}\"";
+            Process.Start(new ProcessStartInfo("cmd.exe", cmd)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
+            });
+        }
+        catch
+        {
+            // best-effort
+        }
+    }
+
+    /// <summary>
+    /// Finds the install directory wherever the app was placed:
+    /// 1) autostart registry entry exe path;
+    /// 2) desktop shortcut target;
+    /// 3) the default %LocalAppData%\Programs folder.
+    /// </summary>
+    private static string? ResolveInstalledDir()
+    {
+        try
+        {
+            using Microsoft.Win32.RegistryKey? runKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                @"Software\Microsoft\Windows\CurrentVersion\Run");
+            if (runKey?.GetValue("TimerApp") is string raw)
+            {
+                string exePath = raw.Trim();
+                if (exePath.StartsWith('"'))
+                {
+                    int end = exePath.IndexOf('"', 1);
+                    exePath = end > 0 ? exePath[1..end] : exePath.Trim('"');
+                }
+                else if (exePath.Contains(' '))
+                {
+                    exePath = exePath.Split(' ')[0];
+                }
+
+                if (File.Exists(exePath))
+                    return Path.GetDirectoryName(exePath);
+            }
+        }
+        catch
+        {
+            // registry unavailable — try other sources
+        }
+
+        string desktopLink = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+            "STM — Sirko Time Manager.lnk");
+        if (File.Exists(desktopLink))
+        {
+            string? linked = ShortcutService.TargetOf(desktopLink);
+            if (linked is not null && Path.GetDirectoryName(linked) is { } linkedDir)
+                return linkedDir;
+        }
+
+        return Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Programs", "Sirko Time Manager");
+    }
 }

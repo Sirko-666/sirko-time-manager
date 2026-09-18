@@ -24,6 +24,8 @@
 
     <sys:String x:Key="L_Schedule">Schedule</sys:String>
     <sys:String x:Key="L_Cancel">Cancel</sys:String>
+    <sys:String x:Key="L_UninstallApp">Uninstall app</sys:String>
+    <sys:String x:Key="L_UninstallWarning">STM will be removed completely: program files, shortcuts, the autostart entry and data (alarms/timers). Continue?</sys:String>
     <sys:String x:Key="L_ScheduledFor">Scheduled for</sys:String>
 
     <sys:String x:Key="L_TabAlarms">Alarms</sys:String>
@@ -95,6 +97,8 @@
     <sys:String x:Key="L_AboutSchedule">Schedule Sleep or Shutdown for an exact time of day. If that time already passed today, the next occurrence (tomorrow) is used. After scheduling, the dial locks and shows a status line; “Cancel” unarms it. Frequently used times can be saved and picked from “Saved”.</sys:String>
     <sys:String x:Key="L_AboutAlarms">Create alarms: dial, weekday repeat and an optional label. The row switch enables or disables each alarm; one-shot alarms turn themselves off after firing. Click a row to edit, use “Delete” inside the editor. Every alarm can use its own sound: the speaker icon opens the sound list (system sounds plus Windows Media wavs), “Add sound…” imports a WAV/MP3 and the cross removes imported ones. When an alarm fires the sound plays for a minute, then repeats every 5 minutes (long tracks play fully) until you press “Stop”.</sys:String>
     <sys:String x:Key="L_AboutApps">Add apps from the installed list or browse for an .exe/.lnk manually. Each card holds the icon, the name, three toggles (master, start, stop) and two dials — the launch and close time of the program. A disabled card is dimmed and runs nothing. Drag cards (hold LMB) to reorder — the order persists. “Select” enables multi-delete with checkboxes: a “Select all” switch and “Delete selected” with confirmation; the trash icon deletes a single card with confirmation.</sys:String>
-    <sys:String x:Key="L_AboutSettings">Language: Ukrainian, English, Russian. Theme: black or white. “Start with Windows” writes an entry into the current-user Run registry key so the app starts with the system. All settings persist automatically and are restored after a restart.</sys:String>
+    <sys:String x:Key="L_AboutSettings">Language: Ukrainian, English, Russian. Theme: dark or light. “Start with Windows” writes an entry into the current-user Run registry key so the app starts with the system. At the bottom of the tab — the “Uninstall app” button: complete removal of files, shortcuts, autostart and data with a confirmation. All settings persist automatically and are restored after a restart.</sys:String>
 
+    <sys:String x:Key="L_UninstallDoneText">The application has been completely removed.</sys:String>
+    <sys:String x:Key="L_UninstallDoneSub">Click anywhere to close.</sys:String>
 </ResourceDictionary>

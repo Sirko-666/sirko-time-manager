@@ -15,6 +15,9 @@
     <SolidColorBrush x:Key="SwitchOnBrush" Color="#CCFFCC" />
     <SolidColorBrush x:Key="GreenBrush" Color="#03B000" />
     <SolidColorBrush x:Key="DangerBrush" Color="#FF453A" />
+    <SolidColorBrush x:Key="DangerInkBrush" Color="#C24554" />
+    <SolidColorBrush x:Key="DangerHoverBrush" Color="#D85363" />
+    <SolidColorBrush x:Key="OnDangerBrush" Color="#FDFCFC" />
     <SolidColorBrush x:Key="OnInkBrush" Color="#131010" />
 
 </ResourceDictionary>

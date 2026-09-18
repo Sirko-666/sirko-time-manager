@@ -1,16 +1,14 @@
 using System.Windows;
 
-namespace TimerApp.Windows;
+namespace StmInstaller.Windows;
 
-public partial class ConfirmWindow : Window
+public partial class UninstallConfirmWindow : Window
 {
-    public ConfirmWindow(string title, string message, bool dangerButton = false)
+    public UninstallConfirmWindow(string title, string message)
     {
         InitializeComponent();
         TitleText.Text = title;
         MessageText.Text = message;
-        if (dangerButton)
-            ConfirmButton.Style = (System.Windows.Style)this.FindResource("PrimaryDangerButtonStyle");
     }
 
     private void OnConfirmClick(object sender, RoutedEventArgs e) => DialogResult = true;

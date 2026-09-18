@@ -56,4 +56,22 @@ internal static class ShortcutService
             // Shortcut is best-effort; install continues.
         }
     }
+
+    /// <summary>Resolves an .lnk's target path, or null on failure.</summary>
+    public static string? TargetOf(string lnkPath)
+    {
+        try
+        {
+            var link = (IShellLinkW)new ShellLinkClass();
+            ((IPersistFile)link).Load(lnkPath, 0);
+            var target = new StringBuilder(1024);
+            link.GetPath(target, target.Capacity, IntPtr.Zero, 0);
+            string resolved = target.ToString();
+            return string.IsNullOrWhiteSpace(resolved) ? null : resolved;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }

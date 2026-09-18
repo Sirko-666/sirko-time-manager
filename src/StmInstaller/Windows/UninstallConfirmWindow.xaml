@@ -1,12 +1,11 @@
-﻿<Window x:Class="TimerApp.Windows.ConfirmWindow"
+<Window x:Class="StmInstaller.Windows.UninstallConfirmWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource L_ConfirmTitle}"
-        Width="320" SizeToContent="Height"
+        Width="340" SizeToContent="Height"
         WindowStyle="None" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent"
         ShowInTaskbar="False"
-        Icon="pack://application:,,,/Assets/app.ico"
         WindowStartupLocation="CenterOwner"
         FontFamily="{StaticResource MonoFont}">
 
@@ -39,11 +38,9 @@
                 <Button Grid.Column="0" Content="{DynamicResource L_Cancel}"
                         Style="{StaticResource GhostButtonStyle}"
                         HorizontalAlignment="Left" Click="OnCancelClick" />
-                <Button x:Name="ConfirmButton" Grid.Column="1"
-                        Content="{DynamicResource L_Delete}"
-                        Style="{StaticResource PrimaryButtonStyle}" Click="OnConfirmClick" />
+                <Button Grid.Column="1" Content="{DynamicResource L_Delete}"
+                        Style="{StaticResource PrimaryDangerButtonStyle}" Click="OnConfirmClick" />
             </Grid>
         </StackPanel>
     </Border>
 </Window>
-

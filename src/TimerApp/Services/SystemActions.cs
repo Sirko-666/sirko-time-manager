@@ -5,6 +5,7 @@ namespace TimerApp.Services;
 
 public enum PowerAction
 {
+    None,
     Sleep,
     Shutdown
 }
@@ -34,6 +35,10 @@ public static class SystemActions
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden
                 });
+                break;
+
+            case PowerAction.None:
+                // No action requested: countdown/schedule runs without side effects.
                 break;
         }
     }

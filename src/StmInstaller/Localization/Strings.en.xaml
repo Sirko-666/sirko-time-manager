@@ -38,8 +38,17 @@
     <sys:String x:Key="L_InstallFailed">Installation failed: {0}</sys:String>
     <sys:String x:Key="L_NoExe">TimerApp.exe was not found in the installation package.</sys:String>
     <sys:String x:Key="L_InvalidDir">Please specify the installation folder.</sys:String>
+    <sys:String x:Key="L_Retry">Try again</sys:String>
+    <sys:String x:Key="L_NoRights">No write rights for this folder.</sys:String>
 
     <sys:String x:Key="L_DoneTitle">Done!</sys:String>
     <sys:String x:Key="L_DoneText">STM is installed and ready to go.</sys:String>
     <sys:String x:Key="L_RunNow">Run STM now</sys:String>
+    <sys:String x:Key="L_ConfirmTitle">Confirmation</sys:String>
+    <sys:String x:Key="L_Delete">Delete</sys:String>
+    <sys:String x:Key="L_InstallerUninstall">Uninstall app</sys:String>
+    <sys:String x:Key="L_InstallerUninstallWarning">STM will be removed completely: program files, shortcuts, the autostart entry and data (alarms/timers). Continue?</sys:String>
+    <sys:String x:Key="L_UninstallDone">Application removed.</sys:String>
+    <sys:String x:Key="L_UninstallNotFound">STM was not found on this PC.</sys:String>
+    <sys:String x:Key="L_UninstallDoneSub">Click anywhere to close.</sys:String>
 </ResourceDictionary>

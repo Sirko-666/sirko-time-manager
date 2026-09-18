@@ -38,8 +38,17 @@
     <sys:String x:Key="L_InstallFailed">Ошибка установки: {0}</sys:String>
     <sys:String x:Key="L_NoExe">TimerApp.exe не найден в пакете установки.</sys:String>
     <sys:String x:Key="L_InvalidDir">Укажите папку для установки.</sys:String>
+    <sys:String x:Key="L_Retry">Попробовать ещё раз</sys:String>
+    <sys:String x:Key="L_NoRights">Нет прав записи в эту папку.</sys:String>
 
     <sys:String x:Key="L_DoneTitle">Готово!</sys:String>
     <sys:String x:Key="L_DoneText">STM установлен и готов к работе.</sys:String>
     <sys:String x:Key="L_RunNow">Запустить STM сейчас</sys:String>
+    <sys:String x:Key="L_ConfirmTitle">Подтверждение</sys:String>
+    <sys:String x:Key="L_Delete">Удалить</sys:String>
+    <sys:String x:Key="L_InstallerUninstall">Удалить приложение</sys:String>
+    <sys:String x:Key="L_InstallerUninstallWarning">STM будет удалён полностью: файлы программы, ярлыки, запись автозапуска и данные (будильники/таймеры). Продолжить?</sys:String>
+    <sys:String x:Key="L_UninstallDone">Приложение удалено.</sys:String>
+    <sys:String x:Key="L_UninstallNotFound">STM не найден на этом компьютере.</sys:String>
+    <sys:String x:Key="L_UninstallDoneSub">Кликните в любом месте, чтобы закрыть.</sys:String>
 </ResourceDictionary>
