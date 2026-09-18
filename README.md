@@ -3,7 +3,7 @@
 > 🌐 **This README is available in three languages:**
 > 🇬🇧 [English](#english) · 🇺🇦 [Українська](#українська) · 🇷🇺 [Русский](#русский)
 >
-> **Developer:** Serhii Sirenko (Sirko) · Version **0.1** · Windows 10/11
+> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.1** · Windows 10/11
 
 ---
 
@@ -19,7 +19,7 @@ A minimalistic time manager for Windows in a “dark paper” style: countdown t
 **Scheduled** | Sleep / Shutdown at an exact time of day; if that time already passed — tomorrow
 **Alarms** | Weekday repeat, label, any sound (system / Windows Media / own WAV·MP3), ring pattern: 1 minute, then 15 s every 5 minutes until stopped
 **App timers** | App cards: launch & close by schedule, 3 toggles (master / start / stop), drag-to-reorder, multi-delete
-**Settings** | Interface language (Ukrainian / English / Russian), dark / light theme, start with Windows
+**Settings** | Interface language (Ukrainian / English / Russian), dark / light theme, start with Windows, and **uninstall the app** right from the tab (removes files, shortcuts, autostart and data with a danger-styled confirmation)
 
 The app lives in the tray. Closing the window only hides it — timers and alarms keep running. Full exit: right-click the tray icon → **Close app**.
 
@@ -79,7 +79,7 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 **За розкладом** | Сон / Вимкнення на точну добу; якщо час минув — на наступний день
 **Будильники** | Повтор у дні тижня, назва, будь-який звук (системні / Windows Media / свої WAV·MP3), цикл: 1 хвилину, далі кожні 5 хвилин до «Стоп»
 **Таймер застосунків** | Картки застосунків: запуск і вимкнення за розкладом, 3 перемикачі (майстерний/запуск/вимкнення), drag-сортування, масове видалення
-**Налаштування** | Мова (укр / eng / рус), темна / світла тема, автозапуск із Windows
+**Налаштування** | Мова (укр / eng / рус), темна / світла тема, автозапуск із Windows і **видалення застосунку** зі вкладки (файли, ярлики, автозапуск, дані — з підтвердженням)
 
 Застосунок живе в трeю. «Хрестик» лише ховає вікно — таймери працюють далі. Повне закриття — ПКМ по значку в треї → **«Закрити застосунок»**.
 
@@ -111,7 +111,7 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 **По расписанию** | Сон / Выключение на точное время суток; если время прошло — на следующий день
 **Будильники** | Повтор по дням недели, название, любой звук (системные / Windows Media / свои WAV·MP3), цикл: 1 минута, затем каждые 5 минут до «Стоп»
 **Таймер приложений** | Карточки приложений: запуск и закрытие по времени, 3 переключателя (мастер/запуск/выключение), перетаскивание, массовое удаление
-**Настройки** | Язык (укр / eng / рус), тёмная / светлая темы, автозапуск с Windows
+**Настройки** | Язык (укр / eng / рус), тёмная / светлая темы, автозапуск с Windows и **удаление приложения** прямо из вкладки (файлы, ярлыки, автозапуск, данные — с подтверждением)
 
 Приложение живёт в трее. «Крестик» только сворачивает окно — таймеры продолжают работать. Полное закрытие — ПКМ по значку в трее → **«Закрыть приложение»**.
 
@@ -128,6 +128,21 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 
 ### 📄 Лицензия
 Свободен для личного использования. Продажа и платное распространение запрещены (LICENSE.txt).
+
+---
+
+## Changelog
+
+### v0.1.1
+- **Uninstall from the app**: Settings tab → "Uninstall app" (removes program files, shortcuts, autostart entry and user data after a danger-styled confirmation).
+- **Uninstall from the installer**: "Uninstall app" button on the welcome page, works for custom install directories (resolved via registry/shortcut).
+- **"App removed" overlay** after uninstall — topmost, centered, closes on any click or key press.
+- **UAC elevation**: installing into protected folders (e.g. `C:\Program Files`) now requests admin rights automatically.
+- **Reliable installer payload**: the embedded package is always re-extracted, so installers never reuse a stale cached version.
+- README in three languages (English / Ukrainian / Russian).
+
+### v0.1
+- First public release: countdown, scheduled Sleep/Shutdown, alarms with custom sounds, per-app launch/close timers, tray, autostart, dark/light themes, three languages.
 
 ---
 

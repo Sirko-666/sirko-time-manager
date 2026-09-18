@@ -90,6 +90,14 @@ public partial class InstallerWindow : Window
         Step3Text.Text = $"3 · {T("L_Step3")}";
         Step4Text.Text = $"4 · {T("L_Step4")}";
         Title = T("L_InstallerTitle");
+
+        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        string versionText = version is null
+            ? "STM"
+            : version.Build > 0
+                ? $"{version.Major}.{version.Minor}.{version.Build}"
+                : $"{version.Major}.{version.Minor}";
+        WelcomeMeta.Text = $"STM · v{versionText} · Serhii Sirenko (Sirko)";
     }
 
     // -------- Install engine --------
@@ -107,10 +115,8 @@ public partial class InstallerWindow : Window
             return local;
 
         // Self-extracting: unpack the embedded package into %TEMP%\STM-Setup\app.
-        if (Directory.Exists(Path.Combine(Path.GetTempPath(), ExtractDirName, "app")) &&
-            File.Exists(Path.Combine(Path.GetTempPath(), ExtractDirName, "app", "TimerApp.exe")))
-            return Path.Combine(Path.GetTempPath(), ExtractDirName, "app");
-
+        // Always re-extract: a stale extraction from a previous installer must
+        // never shadow the newer embedded package.
         string tempDir = Path.Combine(Path.GetTempPath(), ExtractDirName, "app");
         try
         {
@@ -145,8 +151,11 @@ public partial class InstallerWindow : Window
         }
         catch
         {
-            // Embedded pack unavailable/failed: fall back to dev outputs below.
+            // Embedded pack unavailable/failed: fall back to whatever exists.
         }
+
+        if (Directory.Exists(tempDir) && File.Exists(Path.Combine(tempDir, "TimerApp.exe")))
+            return tempDir;
 
         var devCandidates = new[]
         {

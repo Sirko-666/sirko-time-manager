@@ -27,12 +27,14 @@
 - App lock: single instance via `local\TimerApp-STM-SingleInstance` mutex; second launch signals restore.
 
 ## Successful Solutions
+- Installer always re-extracts the embedded pack → updates never shadowed by cached %TEMP% copies.
 - Looping alarm sound via MediaPlayer `MediaEnded` (beats 2-s timer overlap).
 - Select-mode jump fix: reserved footer + `Hidden` (not `Collapsed`) visibility.
 - Tray autostart: `--autostart` arg parsed in App.OnStartup; window never shown.
 - Ice-red uninstall button + danger confirmation deletes app dir via detached `cmd rmdir` after 2 s.
 
 ## Failed Approaches
+- Self-extracting installer cached `%TEMP%\STM-Setup\app` and reused it, so newer embedded packs were ignored (installs silently kept an older app — e.g. “uninstall” button missing). Fixed: the pack is always re-extracted.
 - Трёхрежимный свич «Неактивний/Сон/Вимкнення» во вкладках 1–2 — отклонён владельцем; вернули две радиокнопки (Сон/Вимкнення, по умолчанию Сон). `PowerAction.None` остался в enum как безопасный no-op.
 - `dotnet build -t:Compile` для WPF — markup not compiled → fake errors (CS5001, missing InitializeComponent).
 - `Get-Content` without UTF-8 encoding → ANSI read destroyed uk/ru localization permanently.
@@ -49,6 +51,7 @@
 - Two alarms sharing same minute: only first fires (AlarmService global last-fired-minute).
 
 ## Current State
-- v0.1 released on GitHub (Sirko-666/sirko-time-manager); installers rebuilt with UAC escalation + dynamic dir uninstall.
+- Version **0.1.1** (csproj `<Version>` in both projects; title/about/installer welcome read it dynamically).
+- v0.1 released on GitHub (Sirko-666/sirko-time-manager); installers rebuilt with UAC escalation + dynamic dir uninstall + always-fresh payload extraction.
 - Uninstall button lives in «Налаштування» (danger style) and in installer bottom-left; both end with topmost «програму видалено» overlay that closes on any input.
 - Overlay cleanup: app schedules dir deletion via detached cmd AFTER overlay close (exe lock prevents earlier deletion).

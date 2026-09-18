@@ -70,7 +70,7 @@
                     <TextBlock Text="Sirko Time Manager"
                                Foreground="{DynamicResource InkBrush}"
                                FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" />
-                    <TextBlock Text="STM · версія 0.1 · розробник: Serhii Sirenko (Sirko)"
+                    <TextBlock x:Name="WelcomeMeta" Text="STM · розробник: Serhii Sirenko (Sirko)"
                                Foreground="{DynamicResource MutedTextBrush}"
                                FontSize="12" Margin="0,6,0,0" HorizontalAlignment="Center" />
                     <TextBlock Text="{DynamicResource L_InstallerIntro}"

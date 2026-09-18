@@ -249,7 +249,10 @@ public partial class MainWindow : Window
     private static string AppVersion()
     {
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-        return version is null ? "0.1" : $"{version.Major}.{version.Minor}";
+        if (version is null) return "0.1.1";
+        return version.Build > 0
+            ? $"{version.Major}.{version.Minor}.{version.Build}"
+            : $"{version.Major}.{version.Minor}";
     }
 
     private void UpdateWindowTitle() =>
