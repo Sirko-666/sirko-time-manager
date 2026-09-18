@@ -1,0 +1,45 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <sys:String x:Key="L_InstallerTitle">Установка STM — Sirko Time Manager</sys:String>
+    <sys:String x:Key="L_Step1">Приветствие</sys:String>
+    <sys:String x:Key="L_Step2">Путь</sys:String>
+    <sys:String x:Key="L_Step3">Опции</sys:String>
+    <sys:String x:Key="L_Step4">Установка</sys:String>
+
+    <sys:String x:Key="L_InstallerStart">Начать</sys:String>
+    <sys:String x:Key="L_Next">Далее</sys:String>
+    <sys:String x:Key="L_Back">Назад</sys:String>
+    <sys:String x:Key="L_Cancel">Отменить</sys:String>
+    <sys:String x:Key="L_InstallNow">Установить</sys:String>
+    <sys:String x:Key="L_InstallerFinish">Завершить</sys:String>
+    <sys:String x:Key="L_Browse">Обзор…</sys:String>
+
+    <sys:String x:Key="L_InstallerIntro">Этот мастер установит STM на ваш ПК.</sys:String>
+    <sys:String x:Key="L_ChooseInstallDir">Куда установить</sys:String>
+    <sys:String x:Key="L_SizeHint">Размер пакета ≈ 15 МБ</sys:String>
+    <sys:String x:Key="L_BrowseTitle">Выберите папку для установки</sys:String>
+
+    <sys:String x:Key="L_OptionsTitle">Параметры установки</sys:String>
+    <sys:String x:Key="L_OptDesktop">Создать ярлык на рабочем столе</sys:String>
+    <sys:String x:Key="L_OptStartMenu">Добавить в меню «Пуск»</sys:String>
+    <sys:String x:Key="L_OptAutostart">Запускать вместе с Windows (автозапуск)</sys:String>
+    <sys:String x:Key="L_OptionsHint">Все параметры можно изменить позже в «Настройках» приложения.</sys:String>
+
+    <sys:String x:Key="L_Installing">Установка…</sys:String>
+    <sys:String x:Key="L_LogCopy">Копирование файлов…</sys:String>
+    <sys:String x:Key="L_LogDesktop">Создание ярлыка на рабочем столе…</sys:String>
+    <sys:String x:Key="L_LogStartMenu">Добавление в меню «Пуск»…</sys:String>
+    <sys:String x:Key="L_LogAutostart">Настройка автозапуска…</sys:String>
+    <sys:String x:Key="L_LogFinish">Завершение установки…</sys:String>
+    <sys:String x:Key="L_WaitFiles">Завершение файловых операций…</sys:String>
+    <sys:String x:Key="L_InstallOk">Установка завершена успешно.</sys:String>
+    <sys:String x:Key="L_InstallFailed">Ошибка установки: {0}</sys:String>
+    <sys:String x:Key="L_NoExe">TimerApp.exe не найден в пакете установки.</sys:String>
+    <sys:String x:Key="L_InvalidDir">Укажите папку для установки.</sys:String>
+
+    <sys:String x:Key="L_DoneTitle">Готово!</sys:String>
+    <sys:String x:Key="L_DoneText">STM установлен и готов к работе.</sys:String>
+    <sys:String x:Key="L_RunNow">Запустить STM сейчас</sys:String>
+</ResourceDictionary>

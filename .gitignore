@@ -1,0 +1,27 @@
+# --- Build outputs ---
+bin/
+obj/
+build/
+out/
+
+# --- Installer artifacts ---
+*.pack.zip
+STM-Setup*.exe
+
+# --- Rider/VS/editor caches ---
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- Windows junk ---
+Thumbs.db
+Desktop.ini
+~$*
+
+# --- Logs / temp ---
+*.log
+*.tmp
+*.cache

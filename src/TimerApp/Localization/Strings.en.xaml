@@ -1,0 +1,100 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <sys:String x:Key="L_AppTitle">STM — Sirko Time Manager</sys:String>
+    <sys:String x:Key="L_TrayOpen">Open</sys:String>
+    <sys:String x:Key="L_TrayExit">Close app</sys:String>
+    <sys:String x:Key="L_TrayBalloon">Minimized to tray — the app keeps running.</sys:String>
+
+    <sys:String x:Key="L_TabCountdown">Countdown</sys:String>
+    <sys:String x:Key="L_TabSchedule">Schedule</sys:String>
+    <sys:String x:Key="L_TabSettings">Settings</sys:String>
+    <sys:String x:Key="L_TabAbout">About</sys:String>
+
+    <sys:String x:Key="L_ModeLabel">Action</sys:String>
+    <sys:String x:Key="L_ModeSleep">Sleep</sys:String>
+    <sys:String x:Key="L_ModeShutdown">Shutdown</sys:String>
+    <sys:String x:Key="L_Start">Start</sys:String>
+    <sys:String x:Key="L_Pause">Pause</sys:String>
+    <sys:String x:Key="L_Resume">Resume</sys:String>
+    <sys:String x:Key="L_Reset">Reset</sys:String>
+    <sys:String x:Key="L_Saved">Saved</sys:String>
+    <sys:String x:Key="L_SaveCurrent">Save</sys:String>
+
+    <sys:String x:Key="L_Schedule">Schedule</sys:String>
+    <sys:String x:Key="L_Cancel">Cancel</sys:String>
+    <sys:String x:Key="L_ScheduledFor">Scheduled for</sys:String>
+
+    <sys:String x:Key="L_TabAlarms">Alarms</sys:String>
+    <sys:String x:Key="L_NoAlarms">No alarms</sys:String>
+    <sys:String x:Key="L_AddAlarm">Add</sys:String>
+    <sys:String x:Key="L_NewAlarm">New alarm</sys:String>
+    <sys:String x:Key="L_EditAlarm">Alarm</sys:String>
+    <sys:String x:Key="L_AlarmLabel">Label</sys:String>
+    <sys:String x:Key="L_AlarmSound">Sound</sys:String>
+    <sys:String x:Key="L_AlarmSoundTitle">Alarm sound</sys:String>
+    <sys:String x:Key="L_Apply">Apply</sys:String>
+    <sys:String x:Key="L_AddSound">Add sound…</sys:String>
+    <sys:String x:Key="L_AlarmRepeat">Repeat</sys:String>
+    <sys:String x:Key="L_AlarmSave">Save</sys:String>
+    <sys:String x:Key="L_DaysEveryday">Every day</sys:String>
+    <sys:String x:Key="L_DaysOnce">Once</sys:String>
+    <sys:String x:Key="L_DaysWorkdays">Mon–Fri</sys:String>
+    <sys:String x:Key="L_DaysWeekends">Sat, Sun</sys:String>
+    <sys:String x:Key="L_AlarmRingTitle">Alarm</sys:String>
+    <sys:String x:Key="L_Stop">Stop</sys:String>
+    <sys:String x:Key="L_DayMon">Mon</sys:String>
+    <sys:String x:Key="L_DayTue">Tue</sys:String>
+    <sys:String x:Key="L_DayWed">Wed</sys:String>
+    <sys:String x:Key="L_DayThu">Thu</sys:String>
+    <sys:String x:Key="L_DayFri">Fri</sys:String>
+    <sys:String x:Key="L_DaySat">Sat</sys:String>
+    <sys:String x:Key="L_DaySun">Sun</sys:String>
+
+    <sys:String x:Key="L_TabApps">App timers</sys:String>
+    <sys:String x:Key="L_AddApp">Add app</sys:String>
+    <sys:String x:Key="L_AppStartTimer">Start</sys:String>
+    <sys:String x:Key="L_AppStopTimer">Stop</sys:String>
+    <sys:String x:Key="L_NoApps">No apps</sys:String>
+    <sys:String x:Key="L_PickAppTitle">Pick an application</sys:String>
+    <sys:String x:Key="L_FindApp">Find manually…</sys:String>
+    <sys:String x:Key="L_SearchApp">Search</sys:String>
+    <sys:String x:Key="L_ConfirmTitle">Confirmation</sys:String>
+    <sys:String x:Key="L_DeleteAppConfirm">Delete app “{0}”?</sys:String>
+    <sys:String x:Key="L_DeleteAppsConfirm">Delete selected apps?</sys:String>
+    <sys:String x:Key="L_DeleteAlarmConfirm">Delete alarm “{0}”?</sys:String>
+    <sys:String x:Key="L_DeleteAlarmsConfirm">Delete selected alarms?</sys:String>
+
+    <sys:String x:Key="L_SavedTimersTitle">Saved timers</sys:String>
+    <sys:String x:Key="L_Select">Select</sys:String>
+    <sys:String x:Key="L_Done">Done</sys:String>
+    <sys:String x:Key="L_SelectAll">Select all</sys:String>
+    <sys:String x:Key="L_DeleteSelected">Delete selected</sys:String>
+    <sys:String x:Key="L_EmptySaved">No saved timers</sys:String>
+    <sys:String x:Key="L_Delete">Delete</sys:String>
+
+    <sys:String x:Key="L_SettingsLanguage">Language</sys:String>
+    <sys:String x:Key="L_SettingsAutostart">Start with Windows</sys:String>
+    <sys:String x:Key="L_LanguageUk">Українська</sys:String>
+    <sys:String x:Key="L_LanguageEn">English</sys:String>
+    <sys:String x:Key="L_LanguageRu">Русский</sys:String>
+    <sys:String x:Key="L_SettingsTheme">Theme</sys:String>
+    <sys:String x:Key="L_ThemeBlack">Dark</sys:String>
+    <sys:String x:Key="L_ThemeWhite">Light</sys:String>
+
+    <sys:String x:Key="L_PlaceholderSchedule">Schedule — soon</sys:String>
+    <sys:String x:Key="L_PlaceholderSettings">Settings — soon</sys:String>
+    <sys:String x:Key="L_PlaceholderAbout">About — soon</sys:String>
+
+    <sys:String x:Key="L_AboutVersion">Version</sys:String>
+    <sys:String x:Key="L_AboutDeveloper">Developer</sys:String>
+    <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) is a compact timer for Windows: countdowns, scheduled actions, alarms, application timers and handy settings. Minimal interface, black &amp; white themes, three languages.</sys:String>
+    <sys:String x:Key="L_AboutFeaturesTitle">Features</sys:String>
+    <sys:String x:Key="L_AboutCountdown">An iOS-style dial: scroll the mouse wheel over hours or minutes to set the time. On the right pick an action — Sleep or Shutdown. “Start” begins the countdown; “Pause/Resume” and “Reset” are available while running. Keep durations via “Save” and apply them from “Saved” (multi-select deletion is supported). When the countdown ends, the chosen action runs immediately.</sys:String>
+    <sys:String x:Key="L_AboutSchedule">Schedule Sleep or Shutdown for an exact time of day. If that time already passed today, the next occurrence (tomorrow) is used. After scheduling, the dial locks and shows a status line; “Cancel” unarms it. Frequently used times can be saved and picked from “Saved”.</sys:String>
+    <sys:String x:Key="L_AboutAlarms">Create alarms: dial, weekday repeat and an optional label. The row switch enables or disables each alarm; one-shot alarms turn themselves off after firing. Click a row to edit, use “Delete” inside the editor. Every alarm can use its own sound: the speaker icon opens the sound list (system sounds plus Windows Media wavs), “Add sound…” imports a WAV/MP3 and the cross removes imported ones. When an alarm fires the sound plays for a minute, then repeats every 5 minutes (long tracks play fully) until you press “Stop”.</sys:String>
+    <sys:String x:Key="L_AboutApps">Add apps from the installed list or browse for an .exe/.lnk manually. Each card holds the icon, the name, three toggles (master, start, stop) and two dials — the launch and close time of the program. A disabled card is dimmed and runs nothing. Drag cards (hold LMB) to reorder — the order persists. “Select” enables multi-delete with checkboxes: a “Select all” switch and “Delete selected” with confirmation; the trash icon deletes a single card with confirmation.</sys:String>
+    <sys:String x:Key="L_AboutSettings">Language: Ukrainian, English, Russian. Theme: black or white. “Start with Windows” writes an entry into the current-user Run registry key so the app starts with the system. All settings persist automatically and are restored after a restart.</sys:String>
+
+</ResourceDictionary>

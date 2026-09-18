@@ -1,0 +1,45 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <sys:String x:Key="L_InstallerTitle">STM — Sirko Time Manager Setup</sys:String>
+    <sys:String x:Key="L_Step1">Welcome</sys:String>
+    <sys:String x:Key="L_Step2">Path</sys:String>
+    <sys:String x:Key="L_Step3">Options</sys:String>
+    <sys:String x:Key="L_Step4">Installing</sys:String>
+
+    <sys:String x:Key="L_InstallerStart">Start</sys:String>
+    <sys:String x:Key="L_Next">Next</sys:String>
+    <sys:String x:Key="L_Back">Back</sys:String>
+    <sys:String x:Key="L_Cancel">Cancel</sys:String>
+    <sys:String x:Key="L_InstallNow">Install</sys:String>
+    <sys:String x:Key="L_InstallerFinish">Finish</sys:String>
+    <sys:String x:Key="L_Browse">Browse…</sys:String>
+
+    <sys:String x:Key="L_InstallerIntro">This wizard will install STM on your PC.</sys:String>
+    <sys:String x:Key="L_ChooseInstallDir">Where to install</sys:String>
+    <sys:String x:Key="L_SizeHint">Package size ≈ 15 MB</sys:String>
+    <sys:String x:Key="L_BrowseTitle">Choose the installation folder</sys:String>
+
+    <sys:String x:Key="L_OptionsTitle">Installation options</sys:String>
+    <sys:String x:Key="L_OptDesktop">Create a desktop shortcut</sys:String>
+    <sys:String x:Key="L_OptStartMenu">Add to the Start menu</sys:String>
+    <sys:String x:Key="L_OptAutostart">Start together with Windows (autostart)</sys:String>
+    <sys:String x:Key="L_OptionsHint">All options can be changed later in the app “Settings”.</sys:String>
+
+    <sys:String x:Key="L_Installing">Installing…</sys:String>
+    <sys:String x:Key="L_LogCopy">Copying files…</sys:String>
+    <sys:String x:Key="L_LogDesktop">Creating the desktop shortcut…</sys:String>
+    <sys:String x:Key="L_LogStartMenu">Adding to the Start menu…</sys:String>
+    <sys:String x:Key="L_LogAutostart">Setting up autostart…</sys:String>
+    <sys:String x:Key="L_LogFinish">Finishing the installation…</sys:String>
+    <sys:String x:Key="L_WaitFiles">Finishing file operations…</sys:String>
+    <sys:String x:Key="L_InstallOk">Installation finished successfully.</sys:String>
+    <sys:String x:Key="L_InstallFailed">Installation failed: {0}</sys:String>
+    <sys:String x:Key="L_NoExe">TimerApp.exe was not found in the installation package.</sys:String>
+    <sys:String x:Key="L_InvalidDir">Please specify the installation folder.</sys:String>
+
+    <sys:String x:Key="L_DoneTitle">Done!</sys:String>
+    <sys:String x:Key="L_DoneText">STM is installed and ready to go.</sys:String>
+    <sys:String x:Key="L_RunNow">Run STM now</sys:String>
+</ResourceDictionary>

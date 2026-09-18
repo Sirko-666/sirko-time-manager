@@ -1,0 +1,418 @@
+<Window x:Class="TimerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctrl="clr-namespace:TimerApp.Controls"
+        Icon="pack://application:,,,/Assets/app.ico"
+        Title="{DynamicResource L_AppTitle}"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource PaperBrush}"
+        FontFamily="{StaticResource MonoFont}">
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- ================= TOP TAB STRIP : settings / about ================= -->
+        <Grid Grid.Row="0">
+            <Rectangle Height="1" Fill="{DynamicResource HairlineBrush}" VerticalAlignment="Bottom" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <ToggleButton x:Name="TabSettings"
+                              Style="{StaticResource TabButtonStyle}"
+                              Content="{DynamicResource L_TabSettings}"
+                              Click="OnTabChange" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ToggleButton x:Name="TabAbout"
+                              Style="{StaticResource TabButtonStyle}"
+                              Content="{DynamicResource L_TabAbout}"
+                              Click="OnTabChange" />
+            </StackPanel>
+        </Grid>
+
+        <!-- ================= CONTENT ================= -->
+        <Grid Grid.Row="1" Margin="28,24">
+
+            <!-- ===== TAB 1 : countdown ===== -->
+            <Grid x:Name="PanelCountdown">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Time dial -->
+                    <Border Grid.Column="0" Background="{DynamicResource PanelBrush}"
+                            BorderBrush="{DynamicResource HairlineBrush}" BorderThickness="1"
+                            CornerRadius="6" Padding="10,4" VerticalAlignment="Center">
+                        <ctrl:TimeDial x:Name="Dial" LargeMode="True" IsEditable="True" />
+                    </Border>
+
+                    <!-- Mode -->
+                    <StackPanel Grid.Column="1" Margin="32,0,0,0"
+                                VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <TextBlock Text="{DynamicResource L_ModeLabel}"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="12" Margin="2,0,0,8" />
+                        <RadioButton x:Name="ModeSleep" GroupName="Mode"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_ModeSleep}"
+                                     IsChecked="True" Margin="0,0,0,8" />
+                        <RadioButton x:Name="ModeShutdown" GroupName="Mode"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_ModeShutdown}" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Action row -->
+                <Grid Grid.Row="1" Margin="0,20,0,0" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" x:Name="SavedPanel">
+                        <Button Content="{DynamicResource L_Saved}"
+                                Style="{StaticResource GhostButtonStyle}"
+                                Click="OnSavedClick" />
+                        <Button Content="{DynamicResource L_SaveCurrent}"
+                                Style="{StaticResource GhostButtonStyle}"
+                                Margin="8,0,0,0"
+                                Click="OnSaveCurrentClick" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" x:Name="ActionPanel" Margin="32,0,0,0">
+                        <Button x:Name="StartButton"
+                                Content="{DynamicResource L_Start}"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="OnStartClick" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <!-- ===== TAB 2 : schedule ===== -->
+            <Grid x:Name="PanelSchedule" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Time dial -->
+                    <Border Grid.Column="0" Background="{DynamicResource PanelBrush}"
+                            BorderBrush="{DynamicResource HairlineBrush}" BorderThickness="1"
+                            CornerRadius="6" Padding="10,4" VerticalAlignment="Center">
+                        <ctrl:TimeDial x:Name="ScheduleDial" LargeMode="True" IsEditable="True" />
+                    </Border>
+
+                    <!-- Mode -->
+                    <StackPanel x:Name="ScheduleModePanel" Grid.Column="1" Margin="32,0,0,0"
+                                VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <TextBlock Text="{DynamicResource L_ModeLabel}"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="12" Margin="2,0,0,8" />
+                        <RadioButton x:Name="ScheduleModeSleep" GroupName="ScheduleMode"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_ModeSleep}"
+                                     IsChecked="True" Margin="0,0,0,8" />
+                        <RadioButton x:Name="ScheduleModeShutdown" GroupName="ScheduleMode"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_ModeShutdown}" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Status -->
+                <TextBlock x:Name="ScheduleStatus" Grid.Row="1"
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           FontSize="13" Margin="2,14,0,0"
+                           HorizontalAlignment="Center"
+                           Visibility="Collapsed" />
+
+                <!-- Action row -->
+                <Grid Grid.Row="2" Margin="0,20,0,0" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" x:Name="ScheduleSavedPanel">
+                        <Button Content="{DynamicResource L_Saved}"
+                                Style="{StaticResource GhostButtonStyle}"
+                                Click="OnScheduleSavedClick" />
+                        <Button Content="{DynamicResource L_SaveCurrent}"
+                                Style="{StaticResource GhostButtonStyle}"
+                                Margin="8,0,0,0"
+                                Click="OnScheduleSaveCurrentClick" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" x:Name="ScheduleActionPanel" Margin="32,0,0,0" />
+                </Grid>
+            </Grid>
+
+            <!-- ===== TAB 3 : alarms ===== -->
+            <Grid x:Name="PanelAlarms" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="AddAlarmButton"
+                            Content="{DynamicResource L_AddAlarm}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="OnAddAlarmClick" />
+                    <Button Content="{DynamicResource L_Select}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Margin="8,0,0,0"
+                            Click="OnAlarmSelectClick" />
+                </StackPanel>
+
+                <Grid Grid.Row="1" Margin="0,14,0,0">
+                    <TextBlock x:Name="NoAlarmsHint"
+                               Text="{DynamicResource L_NoAlarms}"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Visibility="Collapsed" />
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="AlarmList" HorizontalAlignment="Center" Visibility="Collapsed" />
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Reserved footer row (like app-timers tab): no list jump on mode toggle. -->
+                <Grid Grid.Row="2" x:Name="AlarmSelectionFooter" Margin="2,10,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ToggleButton x:Name="AlarmSelectAllSwitch"
+                                      Style="{StaticResource SwitchStyle}"
+                                      Checked="OnAlarmSelectAllChanged"
+                                      Unchecked="OnAlarmSelectAllChanged" />
+                        <TextBlock x:Name="AlarmSelectAllLabel"
+                                   Text="{DynamicResource L_SelectAll}"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="13" VerticalAlignment="Center" Margin="10,0,0,0" />
+                    </StackPanel>
+                    <Button x:Name="AlarmDeleteSelectedButton"
+                            Content="{DynamicResource L_DeleteSelected}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Click="OnAlarmDeleteSelectedClick" />
+                </Grid>
+            </Grid>
+
+            <!-- ===== TAB 4 : app timers ===== -->
+            <Grid x:Name="PanelApps" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="{DynamicResource L_AddApp}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Margin="2,0,0,0"
+                            Click="OnAddAppClick" />
+                    <Button Content="{DynamicResource L_FindApp}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Margin="8,0,0,0"
+                            Click="OnBrowseAppClick" />
+                    <Button Content="{DynamicResource L_Select}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Margin="8,0,0,0"
+                            Click="OnAppSelectClick" />
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+                    <TextBlock x:Name="NoAppsHint"
+                               Text="{DynamicResource L_NoApps}"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Visibility="Collapsed" />
+                    <ScrollViewer x:Name="AppScroll" Margin="0,16,0,0"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Visibility="Collapsed">
+                        <StackPanel x:Name="AppCardList" HorizontalAlignment="Center" />
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Reserved row: always occupies its height so the card list never jumps. -->
+                <Grid Grid.Row="2" x:Name="SelectionFooter" Margin="2,10,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ToggleButton x:Name="AppSelectAllSwitch"
+                                      Style="{StaticResource SwitchStyle}"
+                                      Checked="OnAppSelectAllChanged"
+                                      Unchecked="OnAppSelectAllChanged" />
+                        <TextBlock x:Name="AppSelectAllLabel"
+                                   Text="{DynamicResource L_SelectAll}"
+                                   Foreground="{DynamicResource MutedTextBrush}"
+                                   FontSize="13" VerticalAlignment="Center" Margin="10,0,0,0" />
+                    </StackPanel>
+                    <Button x:Name="AppDeleteSelectedButton"
+                            Content="{DynamicResource L_DeleteSelected}"
+                            Style="{StaticResource GhostButtonStyle}"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Click="OnAppDeleteSelectedClick" />
+                </Grid>
+            </Grid>
+
+            <!-- ===== TAB 5 : settings ===== -->
+            <Grid x:Name="PanelSettings" Visibility="Collapsed">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4,0,8,0">
+                    <TextBlock Text="{DynamicResource L_SettingsLanguage}"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="12" Margin="2,0,0,8" />
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="LangUk" GroupName="Lang"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_LanguageUk}"
+                                     Checked="OnLanguageChecked" />
+                        <RadioButton x:Name="LangEn" GroupName="Lang"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_LanguageEn}"
+                                     Margin="8,0,0,0" Checked="OnLanguageChecked" />
+                        <RadioButton x:Name="LangRu" GroupName="Lang"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_LanguageRu}"
+                                     Margin="8,0,0,0" Checked="OnLanguageChecked" />
+                    </StackPanel>
+
+                    <TextBlock Text="{DynamicResource L_SettingsTheme}"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="12" Margin="2,20,0,8" />
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="ThemeBlack" GroupName="Theme"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_ThemeBlack}"
+                                     Checked="OnThemeRadioChecked" />
+                        <RadioButton x:Name="ThemeWhite" GroupName="Theme"
+                                     Style="{StaticResource ModeToggleStyle}"
+                                     Content="{DynamicResource L_ThemeWhite}"
+                                     Margin="8,0,0,0"
+                                     Checked="OnThemeRadioChecked" />
+                    </StackPanel>
+
+                    <TextBlock Text="{DynamicResource L_SettingsAutostart}"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="12" Margin="2,20,0,8" />
+                    <ToggleButton x:Name="AutostartSwitch"
+                                  Style="{StaticResource SwitchStyle}"
+                                  HorizontalAlignment="Left"
+                                  Checked="OnAutostartSwitchChanged"
+                                  Unchecked="OnAutostartSwitchChanged" />
+                </StackPanel>
+            </Grid>
+
+            <!-- ===== TAB 6 : about ===== -->
+            <Grid x:Name="PanelAbout" Visibility="Collapsed">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel HorizontalAlignment="Center" MaxWidth="560" Margin="2,0,6,0">
+                    <!-- Header -->
+                    <TextBlock Text="Sirko Time Manager"
+                               Foreground="{DynamicResource InkBrush}"
+                               FontSize="22" FontWeight="Bold" />
+                    <TextBlock x:Name="AboutMeta"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="12" Margin="0,4,0,0" />
+
+                    <Rectangle Height="1" Fill="{DynamicResource HairlineBrush}" Margin="0,12,0,12" />
+
+                    <TextBlock Text="{DynamicResource L_AboutIntro}"
+                               Foreground="{DynamicResource BodyTextBrush}"
+                               FontSize="13" TextWrapping="Wrap" />
+
+                    <TextBlock Text="{DynamicResource L_AboutFeaturesTitle}"
+                               Foreground="{DynamicResource InkBrush}"
+                               FontSize="14" FontWeight="SemiBold" Margin="0,18,0,2" />
+
+                    <Expander Style="{StaticResource AboutBlockStyle}">
+                        <Expander.Header>
+                            <TextBlock Text="{DynamicResource L_TabCountdown}" FontSize="14" FontWeight="SemiBold" />
+                        </Expander.Header>
+                        <TextBlock Text="{DynamicResource L_AboutCountdown}"
+                                   Foreground="{DynamicResource BodyTextBrush}"
+                                   FontSize="13" TextWrapping="Wrap" />
+                    </Expander>
+
+                    <Expander Style="{StaticResource AboutBlockStyle}">
+                        <Expander.Header>
+                            <TextBlock Text="{DynamicResource L_TabSchedule}" FontSize="14" FontWeight="SemiBold" />
+                        </Expander.Header>
+                        <TextBlock Text="{DynamicResource L_AboutSchedule}"
+                                   Foreground="{DynamicResource BodyTextBrush}"
+                                   FontSize="13" TextWrapping="Wrap" />
+                    </Expander>
+
+                    <Expander Style="{StaticResource AboutBlockStyle}">
+                        <Expander.Header>
+                            <TextBlock Text="{DynamicResource L_TabAlarms}" FontSize="14" FontWeight="SemiBold" />
+                        </Expander.Header>
+                        <TextBlock Text="{DynamicResource L_AboutAlarms}"
+                                   Foreground="{DynamicResource BodyTextBrush}"
+                                   FontSize="13" TextWrapping="Wrap" />
+                    </Expander>
+
+                    <Expander Style="{StaticResource AboutBlockStyle}">
+                        <Expander.Header>
+                            <TextBlock Text="{DynamicResource L_TabApps}" FontSize="14" FontWeight="SemiBold" />
+                        </Expander.Header>
+                        <TextBlock Text="{DynamicResource L_AboutApps}"
+                                   Foreground="{DynamicResource BodyTextBrush}"
+                                   FontSize="13" TextWrapping="Wrap" />
+                    </Expander>
+
+                    <Expander Style="{StaticResource AboutBlockStyle}">
+                        <Expander.Header>
+                            <TextBlock Text="{DynamicResource L_TabSettings}" FontSize="14" FontWeight="SemiBold" />
+                        </Expander.Header>
+                        <TextBlock Text="{DynamicResource L_AboutSettings}"
+                                   Foreground="{DynamicResource BodyTextBrush}"
+                                   FontSize="13" TextWrapping="Wrap" />
+                    </Expander>
+                </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <!-- ================= BOTTOM TAB STRIP ================= -->
+        <Grid Grid.Row="2">
+            <Rectangle Height="1" Fill="{DynamicResource HairlineBrush}" VerticalAlignment="Top" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <ToggleButton x:Name="TabCountdown"
+                              Style="{StaticResource TabButtonStyle}"
+                              Content="{DynamicResource L_TabCountdown}"
+                              IsChecked="True"
+                              Click="OnTabChange" />
+                <ToggleButton x:Name="TabSchedule"
+                              Style="{StaticResource TabButtonStyle}"
+                              Content="{DynamicResource L_TabSchedule}"
+                              Click="OnTabChange" />
+                <ToggleButton x:Name="TabAlarms"
+                              Style="{StaticResource TabButtonStyle}"
+                              Content="{DynamicResource L_TabAlarms}"
+                              Click="OnTabChange" />
+                <ToggleButton x:Name="TabApps"
+                              Style="{StaticResource TabButtonStyle}"
+                              Content="{DynamicResource L_TabApps}"
+                              Click="OnTabChange" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

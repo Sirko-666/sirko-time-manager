@@ -1,0 +1,20 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Dark theme (default) -->
+    <SolidColorBrush x:Key="PaperBrush" Color="#131010" />
+    <SolidColorBrush x:Key="PanelBrush" Color="#1B1818" />
+    <SolidColorBrush x:Key="PanelHoverBrush" Color="#292424" />
+    <SolidColorBrush x:Key="InkBrush" Color="#F2EDED" />
+    <SolidColorBrush x:Key="InkHoverBrush" Color="#F8F6F6" />
+    <SolidColorBrush x:Key="BodyTextBrush" Color="#B8B2B2" />
+    <SolidColorBrush x:Key="MutedTextBrush" Color="#7F7A7A" />
+    <SolidColorBrush x:Key="HairlineBrush" Color="#3D3838" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#FDFFCC" />
+    <SolidColorBrush x:Key="AccentTextBrush" Color="#201D1D" />
+    <SolidColorBrush x:Key="SwitchOnBrush" Color="#CCFFCC" />
+    <SolidColorBrush x:Key="GreenBrush" Color="#03B000" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#FF453A" />
+    <SolidColorBrush x:Key="OnInkBrush" Color="#131010" />
+
+</ResourceDictionary>

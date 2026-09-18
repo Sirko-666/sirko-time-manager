@@ -1,0 +1,100 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <sys:String x:Key="L_AppTitle">STM — Sirko Time Manager</sys:String>
+    <sys:String x:Key="L_TrayOpen">Відкрити</sys:String>
+    <sys:String x:Key="L_TrayExit">Закрити застосунок</sys:String>
+    <sys:String x:Key="L_TrayBalloon">Згорнуто в трей — застосунок продовжує працювати.</sys:String>
+
+    <sys:String x:Key="L_TabCountdown">Зворотний відлік</sys:String>
+    <sys:String x:Key="L_TabSchedule">За розкладом</sys:String>
+    <sys:String x:Key="L_TabSettings">Налаштування</sys:String>
+    <sys:String x:Key="L_TabAbout">Про застосунок</sys:String>
+
+    <sys:String x:Key="L_ModeLabel">Дія</sys:String>
+    <sys:String x:Key="L_ModeSleep">Сон</sys:String>
+    <sys:String x:Key="L_ModeShutdown">Вимкнення</sys:String>
+    <sys:String x:Key="L_Start">Старт</sys:String>
+    <sys:String x:Key="L_Pause">Пауза</sys:String>
+    <sys:String x:Key="L_Resume">Продовжити</sys:String>
+    <sys:String x:Key="L_Reset">Скидання</sys:String>
+    <sys:String x:Key="L_Saved">Збережені</sys:String>
+    <sys:String x:Key="L_SaveCurrent">Зберегти</sys:String>
+
+    <sys:String x:Key="L_Schedule">Запланувати</sys:String>
+    <sys:String x:Key="L_Cancel">Скасувати</sys:String>
+    <sys:String x:Key="L_ScheduledFor">Заплановано</sys:String>
+
+    <sys:String x:Key="L_TabAlarms">Будильники</sys:String>
+    <sys:String x:Key="L_NoAlarms">Немає будильників</sys:String>
+    <sys:String x:Key="L_AddAlarm">Додати</sys:String>
+    <sys:String x:Key="L_NewAlarm">Новий будильник</sys:String>
+    <sys:String x:Key="L_EditAlarm">Будильник</sys:String>
+    <sys:String x:Key="L_AlarmLabel">Назва</sys:String>
+    <sys:String x:Key="L_AlarmSound">Звук</sys:String>
+    <sys:String x:Key="L_AlarmSoundTitle">Звук будильника</sys:String>
+    <sys:String x:Key="L_Apply">Застосувати</sys:String>
+    <sys:String x:Key="L_AddSound">Додати звук…</sys:String>
+    <sys:String x:Key="L_AlarmRepeat">Повтор</sys:String>
+    <sys:String x:Key="L_AlarmSave">Зберегти</sys:String>
+    <sys:String x:Key="L_DaysEveryday">Щодня</sys:String>
+    <sys:String x:Key="L_DaysOnce">Одноразово</sys:String>
+    <sys:String x:Key="L_DaysWorkdays">Пн–Пт</sys:String>
+    <sys:String x:Key="L_DaysWeekends">Сб, Нд</sys:String>
+    <sys:String x:Key="L_AlarmRingTitle">Будильник</sys:String>
+    <sys:String x:Key="L_Stop">Стоп</sys:String>
+    <sys:String x:Key="L_DayMon">Пн</sys:String>
+    <sys:String x:Key="L_DayTue">Вт</sys:String>
+    <sys:String x:Key="L_DayWed">Ср</sys:String>
+    <sys:String x:Key="L_DayThu">Чт</sys:String>
+    <sys:String x:Key="L_DayFri">Пт</sys:String>
+    <sys:String x:Key="L_DaySat">Сб</sys:String>
+    <sys:String x:Key="L_DaySun">Нд</sys:String>
+
+    <sys:String x:Key="L_TabApps">Таймер застосунків</sys:String>
+    <sys:String x:Key="L_AddApp">Додати застосунок</sys:String>
+    <sys:String x:Key="L_AppStartTimer">Запуск</sys:String>
+    <sys:String x:Key="L_AppStopTimer">Вимкнення</sys:String>
+    <sys:String x:Key="L_NoApps">Немає застосунків</sys:String>
+    <sys:String x:Key="L_PickAppTitle">Вибір застосунку</sys:String>
+    <sys:String x:Key="L_FindApp">Знайти вручну…</sys:String>
+    <sys:String x:Key="L_SearchApp">Пошук</sys:String>
+    <sys:String x:Key="L_ConfirmTitle">Підтвердження</sys:String>
+    <sys:String x:Key="L_DeleteAppConfirm">Видалити застосунок «{0}»?</sys:String>
+    <sys:String x:Key="L_DeleteAppsConfirm">Видалити вибрані застосунки?</sys:String>
+    <sys:String x:Key="L_DeleteAlarmConfirm">Видалити будильник «{0}»?</sys:String>
+    <sys:String x:Key="L_DeleteAlarmsConfirm">Видалити вибрані будильники?</sys:String>
+
+    <sys:String x:Key="L_SavedTimersTitle">Збережені таймери</sys:String>
+    <sys:String x:Key="L_Select">Вибрати</sys:String>
+    <sys:String x:Key="L_Done">Готово</sys:String>
+    <sys:String x:Key="L_SelectAll">Вибрати все</sys:String>
+    <sys:String x:Key="L_DeleteSelected">Видалити вибрані</sys:String>
+    <sys:String x:Key="L_EmptySaved">Немає збережених таймерів</sys:String>
+    <sys:String x:Key="L_Delete">Видалити</sys:String>
+
+    <sys:String x:Key="L_SettingsLanguage">Мова</sys:String>
+    <sys:String x:Key="L_SettingsAutostart">Автозапуск із Windows</sys:String>
+    <sys:String x:Key="L_LanguageUk">Українська</sys:String>
+    <sys:String x:Key="L_LanguageEn">English</sys:String>
+    <sys:String x:Key="L_LanguageRu">Русский</sys:String>
+    <sys:String x:Key="L_SettingsTheme">Тема</sys:String>
+    <sys:String x:Key="L_ThemeBlack">Темна</sys:String>
+    <sys:String x:Key="L_ThemeWhite">Світла</sys:String>
+
+    <sys:String x:Key="L_PlaceholderSchedule">За розкладом — скоро</sys:String>
+    <sys:String x:Key="L_PlaceholderSettings">Налаштування — скоро</sys:String>
+    <sys:String x:Key="L_PlaceholderAbout">Про застосунок — скоро</sys:String>
+
+    <sys:String x:Key="L_AboutVersion">Версія</sys:String>
+    <sys:String x:Key="L_AboutDeveloper">Розробник</sys:String>
+    <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) — компактний таймер для Windows: зворотний відлік, дії за розкладом, будильники, таймери застосунків і зручні налаштування. Мінімалістичний інтерфейс, чорна та біла теми, три мови.</sys:String>
+    <sys:String x:Key="L_AboutFeaturesTitle">Можливості</sys:String>
+    <sys:String x:Key="L_AboutCountdown">Циферблат у стилі iOS: прокрутіть колесо мишки над годинами або хвилинами, щоб задати час. Праворуч виберіть дію — Сон або Вимкнення ПК. «Старт» запускає відлік; під час роботи доступні «Пауза/Продовжити» та «Скидання». Поточне значення можна «Зберегти» й швидко застосувати через «Збережені» (з множинним видаленням). Коли відлік завершується, обрана дія виконується негайно.</sys:String>
+    <sys:String x:Key="L_AboutSchedule">Заплануйте Сон або Вимкнення на точний час доби. Якщо цей час уже минув сьогодні, дію буде виконано наступного дня. Після планування циферблат блокується й показується статус («Заплановано 07:30 · Сон»); «Скасувати» знімає планування. Потрібні часи зберігаються через «Зберегти» й обираються у «Збережені».</sys:String>
+    <sys:String x:Key="L_AboutAlarms">Створюйте будильники: циферблат, повтор у дні тижня й назва. Перемикач на рядку активує будильник; одноразовий після спрацювання вимикається сам. Клік по рядку — редагування, кнопка «Видалити» — вилучення в редакторі. Кожен будильник має власний звук: значок динаміка відкриває список (системні звуки + звуки Windows), можна «Додати звук…» (WAV/MP3) і видалити їх хрестиком. При спрацюванні звук грає 1 хвилину, далі повторюється кожні 5 хвилин (довгі треки відтворюються повністю), доки не натиснете «Стоп».</sys:String>
+    <sys:String x:Key="L_AboutApps">Додайте застосунок зі списку встановлених або знайдіть ярлик вручну (.exe/.lnk). На картці: іконка, назва, три перемикачі (майстерний, запуск, вимкнення) і два циферблати — час запуску та закриття програми. Вимкнена картка приглушується й не виконує таймери. Порядок карток змінюється перетягуванням (ЛКМ) і зберігається. «Вибрати» вмикає масове видалення: прапорці, перемикач «Вибрати все» та «Видалити вибрані» з підтвердженням; хрестик видаляє картку з підтвердженням.</sys:String>
+    <sys:String x:Key="L_AboutSettings">Мова: українська, англійська, російська. Тема: чорна або біла. «Автозапуск із Windows» записує застосунок у реєстр (Run), щоб він стартував разом із системою. Усі налаштування зберігаються автоматично та відновлюються після перезапуску.</sys:String>
+
+</ResourceDictionary>
