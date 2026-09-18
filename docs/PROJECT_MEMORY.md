@@ -11,6 +11,7 @@
 - Services: CountdownController (drift-free countdown), ScheduleController (wall-clock one-shot), AlarmService (20 s polling), AppTimerService (launch/close apps), SoundService (sys+Media+user WAV/MP3), AutostartService (HKCU Run), SettingsStore (JSON in `%AppData%\TimerApp`), InstalledAppsService + ShortcutResolver (IShellLink COM).
 
 ## Important Decisions
+- Version source of truth: `<Version>` in both csproj; AppVersion() prints Major.Minor(.Build>0) and feeds the window title, About header and installer welcome line.
 - Base window 545×660 px; all tabs fit that; longer content scrolls inside its panel.
 - Select-mode on cards: drag disabled, trash↔checkbox swap in fixed-width slots, selection footer always reserves height (prevents list jumps).
 - Alarm sound: 1 min continuous, then 15 s every 5 min; tracks >45 s play fully once per 5 min (MediaPlayer loop via MediaEnded).
@@ -47,11 +48,11 @@
 
 ## Known Problems
 - Installer not code-signed → SmartScreen warning (plan: Azure Trusted Signing later if adoption grows).
-- Uninstaller (both app Settings button and installer's «Відалити застосунок») resolves the install dir dynamically: registry Run exe path → desktop shortcut target → default %LocalAppData%\Programs path (custom install dirs covered). «Установленные приложения» entry отсуцевом (Uninstall key + uninstaller.exe — tech debt).
 - Two alarms sharing same minute: only first fires (AlarmService global last-fired-minute).
 
 ## Current State
-- Version **0.1.1** (csproj `<Version>` in both projects; title/about/installer welcome read it dynamically).
-- v0.1 released on GitHub (Sirko-666/sirko-time-manager); installers rebuilt with UAC escalation + dynamic dir uninstall + always-fresh payload extraction.
+- Version **0.1.2** — GitHub: код и README (три языка) обновлены, релиз v0.1.1 опубликован; для v0.1.2 нужно пересобрать релиз (installers: `STM-Setup-fatty.exe`, `STM-Setup-Mini.exe`).
+- csproj `<Version>` в обоих проектах — единый источник версии (title/about/installer welcome/Uninstall registry).
+- Полноценный uninstaller: инсталлер пишет `HKCU\...\Uninstall\STM` (DisplayName/Version/Publisher/Icon/Size/UninstallString=`TimerApp.exe --uninstall`); приложение в режиме `--uninstall` показывает подтверждение, чистит всё и удаляет запись.
 - Uninstall button lives in «Налаштування» (danger style) and in installer bottom-left; both end with topmost «програму видалено» overlay that closes on any input.
 - Overlay cleanup: app schedules dir deletion via detached cmd AFTER overlay close (exe lock prevents earlier deletion).

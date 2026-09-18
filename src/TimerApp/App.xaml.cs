@@ -19,6 +19,13 @@ public partial class App : Application
         ThemeService.Apply(ThemeService.FromKey(SettingsStore.LoadTheme()));
         LocalizationService.Apply(LocalizationService.FromKey(SettingsStore.LoadLanguage()));
 
+        // Invoked by the Windows "Apps & Features" UninstallString.
+        if (e.Args.Any(arg => arg.Equals("--uninstall", StringComparison.OrdinalIgnoreCase)))
+        {
+            RunUninstallMode();
+            return;
+        }
+
         _singleInstance = new Mutex(initiallyOwned: true, MutexName, out bool createdNew);
         if (!createdNew)
         {
@@ -53,6 +60,35 @@ public partial class App : Application
     {
         if (MainWindow is MainWindow main)
             main.ActivateFromTray();
+    }
+
+    /// <summary>
+    /// Silent-ish uninstall path: confirm, remove everything, show the
+    /// "removed" overlay, then schedule the program folder deletion.
+    /// </summary>
+    private void RunUninstallMode()
+    {
+        var confirm = new Windows.ConfirmWindow(
+            LocalizationService.Get("L_ConfirmTitle"),
+            LocalizationService.Get("L_UninstallWarning"),
+            dangerButton: true);
+        if (confirm.ShowDialog() != true)
+        {
+            Shutdown();
+            return;
+        }
+
+        UninstallService.KillOtherInstances();
+        UninstallService.Cleanup();
+
+        var overlay = new Windows.UninstallDoneWindow(
+            "STM",
+            LocalizationService.Get("L_UninstallDoneText"),
+            LocalizationService.Get("L_UninstallDoneSub"));
+        overlay.ShowDialog();
+
+        UninstallService.ScheduleProgramDirCleanup();
+        Shutdown();
     }
 
     protected override void OnExit(ExitEventArgs e)

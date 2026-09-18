@@ -142,8 +142,7 @@ public partial class MainWindow : Window
             dangerButton: true) { Owner = this };
         if (confirm.ShowDialog() != true) return;
 
-        bool success = UninstallCleanup();
-        if (!success) return;
+        UninstallService.Cleanup();
 
         // Topmost "removed" overlay: closes on any click/keypress.
         var overlay = new Windows.UninstallDoneWindow(
@@ -153,66 +152,9 @@ public partial class MainWindow : Window
         overlay.ShowDialog();
 
         // Program dir is locked by this exe — schedule the detached cleanup now.
-        ScheduleProgramDirCleanup();
+        UninstallService.ScheduleProgramDirCleanup();
         _realExit = true;
         Close();
-    }
-
-    private bool UninstallCleanup()
-    {
-        const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
-        const string ShortcutName = "STM — Sirko Time Manager.lnk";
-        bool ok = true;
-
-        try
-        {
-            using var runKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKeyPath, writable: true);
-            runKey?.DeleteValue("TimerApp", false);
-        }
-        catch { ok = false; }
-
-        try
-        {
-            string desktop = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), ShortcutName);
-            if (File.Exists(desktop)) File.Delete(desktop);
-
-            string menu = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
-                "Programs", ShortcutName);
-            if (File.Exists(menu)) File.Delete(menu);
-        }
-        catch { ok = false; }
-
-        try
-        {
-            string dataDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TimerApp");
-            if (Directory.Exists(dataDir))
-                Directory.Delete(dataDir, recursive: true);
-        }
-        catch { ok = false; }
-
-        return ok;
-    }
-
-    private void ScheduleProgramDirCleanup()
-    {
-        try
-        {
-            string exePath = Environment.ProcessPath ?? string.Empty;
-            string dir = Path.GetDirectoryName(exePath);
-            if (string.IsNullOrEmpty(dir) || !Directory.Exists(dir)) return;
-
-            string cmd = $"/c timeout /t 2 /nobreak > nul & rmdir /s /q \"{dir}\"";
-            Process.Start(new ProcessStartInfo("cmd.exe", cmd)
-            {
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden
-            });
-        }
-        catch { /* best-effort */ }
     }
 
     private void OnAppearanceChanged()

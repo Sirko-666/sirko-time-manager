@@ -3,7 +3,7 @@
 > 🌐 **This README is available in three languages:**
 > 🇬🇧 [English](#english) · 🇺🇦 [Українська](#українська) · 🇷🇺 [Русский](#русский)
 >
-> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.1** · Windows 10/11
+> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2** · Windows 10/11
 
 ---
 
@@ -29,12 +29,14 @@ Download the release that fits:
 
 | File | Size | When to take it |
 |---|---|---|
-| `STM-Setup.exe` | ~221 MB | Any PC — **no .NET needed** ✅ recommended |
+| `STM-Setup-fatty.exe` | ~221 MB | Any PC — **no .NET needed** ✅ recommended |
 | `STM-Setup-Mini.exe` | 0.5 MB | If you already have .NET 8 Desktop Runtime |
 
 Double-click → steps: language → folder → switches (shortcuts, autostart) → Install → Done.
 
 > ⚠️ The installer is not digitally signed: SmartScreen shows “Windows protected your PC” → *More info* → *Run anyway*.
+
+STM is also registered in Windows **Settings → Apps → Installed apps**, where it can be uninstalled with its own uninstaller.
 
 Details are in `README-УСТАНОВКА.md` shipped next to the installer.
 
@@ -50,7 +52,7 @@ powershell -File make-installer.ps1         # full (self-contained)
 powershell -File make-installer.ps1 -Mini   # light (framework-dependent)
 ```
 
-Result: `build\STM-Setup.exe` / `build\STM-Setup-Mini.exe`.
+Result: `build\STM-Setup-fatty.exe` / `build\STM-Setup-Mini.exe`.
 
 ### 📁 Data files
 
@@ -85,11 +87,13 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 
 ### 📦 Встановлення
 
-`STM-Setup.exe` (~221 МБ) — для будь-якого ПК, .NET не потрібен ✅. Або `STM-Setup-Mini.exe` (0.5 МБ) — якщо вже встановлено .NET 8 Desktop Runtime.
+`STM-Setup-fatty.exe` (~221 МБ) — для будь-якого ПК, .NET не потрібен ✅. Або `STM-Setup-Mini.exe` (0.5 МБ) — якщо вже встановлено .NET 8 Desktop Runtime.
 
 Двічі клацни → мова → папка → перемикачі (ярлики, автозапуск) → «Встановити» → «Готово».
 
 > ⚠️ Інсталлер не підписаний: SmartScreen покаже «Windows захистила ПК» → *More info* → *Run anyway*.
+
+STM також з'являється в **«Параметри → Програми → Інстальовані програми»** — з власним деінсталятором.
 
 ### 🔧 Збірка з джерел
 `dotnet build -o bin\Test` → `.\bin\Test\TimerApp.exe`; інсталлери — `powershell -File make-installer.ps1 [-Mini]` → `build\`.
@@ -117,11 +121,13 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 
 ### 📦 Установка
 
-`STM-Setup.exe` (~221 МБ) — для любого ПК, .NET не нужен ✅. Либо `STM-Setup-Mini.exe` (0.5 МБ) — если установлен .NET 8 Desktop Runtime.
+`STM-Setup-fatty.exe` (~221 МБ) — для любого ПК, .NET не нужен ✅. Либо `STM-Setup-Mini.exe` (0.5 МБ) — если установлен .NET 8 Desktop Runtime.
 
 Двойной клик → язык → папка → переключатели (ярлыки, автозапуск) → «Установить» → «Готово».
 
 > ⚠️ Инсталлер не подписан цифровой подписью: SmartScreen покажет «Windows защитила» → *More info* → *Run anyway*.
+
+STM также появляется в **«Параметры → Приложения → Установленные приложения»** — со своим деинсталлятором.
 
 ### 🔧 Сборка из источников
 `dotnet build -o bin\Test` → `.\bin\Test\TimerApp.exe`; инсталлеры — `powershell -File make-installer.ps1 [-Mini]` → папка `build\`.
@@ -132,6 +138,11 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 ---
 
 ## Changelog
+
+### v0.1.2
+- STM now registers itself in Windows **Apps & Features** (Settings → Apps → Installed apps) with name, version, publisher, icon and size.
+- **Proper uninstaller**: the Windows entry calls `TimerApp.exe --uninstall` — confirmation, complete cleanup (files, shortcuts, autostart, data, registry entry) and the "removed" overlay.
+- Installer files renamed: `STM-Setup-fatty.exe` (full, no .NET needed) and `STM-Setup-Mini.exe` (light).
 
 ### v0.1.1
 - **Uninstall from the app**: Settings tab → "Uninstall app" (removes program files, shortcuts, autostart entry and user data after a danger-styled confirmation).

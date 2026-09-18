@@ -229,11 +229,49 @@ public partial class InstallerWindow : Window
                     @"Software\Microsoft\Windows\CurrentVersion\Run");
                 key?.SetValue("TimerApp", $"\"{exe}\" --autostart", Microsoft.Win32.RegistryValueKind.String);
             }
+
+            WriteUninstallEntry(exe, _targetDir);
         }
         catch (Exception ex)
         {
             _installError = ex.Message;
         }
+    }
+
+    /// <summary>Registers the app in Windows "Apps &amp; Features".</summary>
+    private static void WriteUninstallEntry(string exe, string dir)
+    {
+        using Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(
+            @"Software\Microsoft\Windows\CurrentVersion\Uninstall\STM");
+
+        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        string versionText = version is null
+            ? "0.1.2"
+            : version.Build > 0
+                ? $"{version.Major}.{version.Minor}.{version.Build}"
+                : $"{version.Major}.{version.Minor}";
+
+        long sizeKb = 0;
+        try
+        {
+            foreach (string file in Directory.EnumerateFiles(dir))
+                sizeKb += new FileInfo(file).Length / 1024;
+        }
+        catch
+        {
+            // size is informational only
+        }
+
+        key.SetValue("DisplayName", "STM — Sirko Time Manager");
+        key.SetValue("DisplayVersion", versionText);
+        key.SetValue("Publisher", "Serhii Sirenko (Sirko)");
+        key.SetValue("DisplayIcon", exe);
+        key.SetValue("InstallLocation", dir);
+        key.SetValue("UninstallString", $"\"{exe}\" --uninstall");
+        key.SetValue("QuietUninstallString", $"\"{exe}\" --uninstall");
+        key.SetValue("EstimatedSize", (int)sizeKb, Microsoft.Win32.RegistryValueKind.DWord);
+        key.SetValue("NoModify", 1, Microsoft.Win32.RegistryValueKind.DWord);
+        key.SetValue("NoRepair", 1, Microsoft.Win32.RegistryValueKind.DWord);
     }
 
     private void ReadOptions()
@@ -500,13 +538,17 @@ public partial class InstallerWindow : Window
             finally { process.Dispose(); }
         }
 
-        // 2. Autostart registry entry.
+        // 2. Autostart registry entry + "Apps & Features" entry.
         try
         {
             Microsoft.Win32.RegistryKey? runKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
                 @"Software\Microsoft\Windows\CurrentVersion\Run", writable: true);
             runKey?.DeleteValue("TimerApp", false);
             runKey?.Dispose();
+
+            Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(
+                @"Software\Microsoft\Windows\CurrentVersion\Uninstall\STM",
+                throwOnMissingSubKey: false);
         }
         catch { /* best-effort */ }
 
