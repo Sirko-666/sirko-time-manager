@@ -34,9 +34,11 @@ public partial class InstallerWindow : Window
         LangUk.IsChecked = true;
         _langInitializing = false;
 
-        PathBox.Text = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Programs", "Sirko Time Manager");
+        // Default location: <system drive>\Program Files\STM (UAC handled on install).
+        string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        if (string.IsNullOrEmpty(programFiles))
+            programFiles = Environment.GetEnvironmentVariable("ProgramFiles") ?? @"C:\Program Files";
+        PathBox.Text = Path.Combine(programFiles, "STM");
 
         MouseLeftButtonDown += (_, _) => DragMove();
         ApplyTexts();

@@ -29,7 +29,7 @@ Download the release that fits:
 
 | File | Size | When to take it |
 |---|---|---|
-| `STM-Setup-fatty.exe` | ~221 MB | Any PC — **no .NET needed** ✅ recommended |
+| `STM-Setup-Fatty.exe` | ~221 MB | Any PC — **no .NET needed** ✅ recommended |
 | `STM-Setup-Mini.exe` | 0.5 MB | If you already have .NET 8 Desktop Runtime |
 
 Double-click → steps: language → folder → switches (shortcuts, autostart) → Install → Done.
@@ -52,7 +52,7 @@ powershell -File make-installer.ps1         # full (self-contained)
 powershell -File make-installer.ps1 -Mini   # light (framework-dependent)
 ```
 
-Result: `build\STM-Setup-fatty.exe` / `build\STM-Setup-Mini.exe`.
+Result: `build\STM-Setup-Fatty.exe` / `build\STM-Setup-Mini.exe`.
 
 ### 📁 Data files
 
@@ -87,7 +87,7 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 
 ### 📦 Встановлення
 
-`STM-Setup-fatty.exe` (~221 МБ) — для будь-якого ПК, .NET не потрібен ✅. Або `STM-Setup-Mini.exe` (0.5 МБ) — якщо вже встановлено .NET 8 Desktop Runtime.
+`STM-Setup-Fatty.exe` (~221 МБ) — для будь-якого ПК, .NET не потрібен ✅. Або `STM-Setup-Mini.exe` (0.5 МБ) — якщо вже встановлено .NET 8 Desktop Runtime.
 
 Двічі клацни → мова → папка → перемикачі (ярлики, автозапуск) → «Встановити» → «Готово».
 
@@ -121,7 +121,7 @@ STM також з'являється в **«Параметри → Програ�
 
 ### 📦 Установка
 
-`STM-Setup-fatty.exe` (~221 МБ) — для любого ПК, .NET не нужен ✅. Либо `STM-Setup-Mini.exe` (0.5 МБ) — если установлен .NET 8 Desktop Runtime.
+`STM-Setup-Fatty.exe` (~221 МБ) — для любого ПК, .NET не нужен ✅. Либо `STM-Setup-Mini.exe` (0.5 МБ) — если установлен .NET 8 Desktop Runtime.
 
 Двойной клик → язык → папка → переключатели (ярлыки, автозапуск) → «Установить» → «Готово».
 
@@ -142,7 +142,7 @@ STM также появляется в **«Параметры → Приложе
 ### v0.1.2
 - STM now registers itself in Windows **Apps & Features** (Settings → Apps → Installed apps) with name, version, publisher, icon and size.
 - **Proper uninstaller**: the Windows entry calls `TimerApp.exe --uninstall` — confirmation, complete cleanup (files, shortcuts, autostart, data, registry entry) and the "removed" overlay.
-- Installer files renamed: `STM-Setup-fatty.exe` (full, no .NET needed) and `STM-Setup-Mini.exe` (light).
+- Installer files renamed: `STM-Setup-Fatty.exe` (full, no .NET needed) and `STM-Setup-Mini.exe` (light).
 
 ### v0.1.1
 - **Uninstall from the app**: Settings tab → "Uninstall app" (removes program files, shortcuts, autostart entry and user data after a danger-styled confirmation).

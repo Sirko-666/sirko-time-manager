@@ -28,7 +28,7 @@ dotnet publish src\StmInstaller -c Release -r win-x64 `
     --self-contained $SelfContained -p:PublishSingleFile=true -o build\setup
 if ($LASTEXITCODE -ne 0) { throw "installer build failed" }
 
-$finalName = "build\STM-Setup-fatty.exe"
+$finalName = "build\STM-Setup-Fatty.exe"
 if ($Mini) { $finalName = "build\STM-Setup-Mini.exe" }
 Copy-Item "build\setup\StmInstaller.exe" $finalName -Force
 Remove-Item "build\STM-Setup.exe" -Force -ErrorAction SilentlyContinue
