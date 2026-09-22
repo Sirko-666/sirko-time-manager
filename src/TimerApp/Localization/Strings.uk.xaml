@@ -93,7 +93,7 @@
     <sys:String x:Key="L_AboutDeveloper">Розробник</sys:String>
     <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) — компактний таймер для Windows: зворотний відлік, дії за розкладом, будильники, таймери застосунків і зручні налаштування. Мінімалістичний інтерфейс, чорна та біла теми, три мови.</sys:String>
     <sys:String x:Key="L_AboutFeaturesTitle">Можливості</sys:String>
-    <sys:String x:Key="L_AboutCountdown">Циферблат у стилі iOS: прокрутіть колесо мишки над годинами або хвилинами, щоб задати час. Праворуч виберіть дію — Сон або Вимкнення ПК. «Старт» запускає відлік; під час роботи доступні «Пауза/Продовжити» та «Скидання». Поточне значення можна «Зберегти» й швидко застосувати через «Збережені» (з множинним видаленням). Коли відлік завершується, обрана дія виконується негайно.</sys:String>
+    <sys:String x:Key="L_AboutCountdown">Циферблат у стилі iOS: прокрутіть колесо мишки або перетягніть мишкою над годинами чи хвилинами, щоб задати час. Праворуч виберіть дію — Сон або Вимкнення ПК. «Старт» запускає відлік; під час роботи доступні «Пауза/Продовжити» та «Скидання». Поточне значення можна «Зберегти» й швидко застосувати через «Збережені» (з множинним видаленням). Коли відлік завершується, обрана дія виконується негайно.</sys:String>
     <sys:String x:Key="L_AboutSchedule">Заплануйте Сон або Вимкнення на точний час доби. Якщо цей час уже минув сьогодні, дію буде виконано наступного дня. Після планування циферблат блокується й показується статус («Заплановано 07:30 · Сон»); «Скасувати» знімає планування. Потрібні часи зберігаються через «Зберегти» й обираються у «Збережені».</sys:String>
     <sys:String x:Key="L_AboutAlarms">Створюйте будильники: циферблат, повтор у дні тижня й назва. Перемикач на рядку активує будильник; одноразовий після спрацювання вимикається сам. Клік по рядку — редагування, кнопка «Видалити» — вилучення в редакторі. Кожен будильник має власний звук: значок динаміка відкриває список (системні звуки + звуки Windows), можна «Додати звук…» (WAV/MP3) і видалити їх хрестиком. При спрацюванні звук грає 1 хвилину, далі повторюється кожні 5 хвилин (довгі треки відтворюються повністю), доки не натиснете «Стоп».</sys:String>
     <sys:String x:Key="L_AboutApps">Додайте застосунок зі списку встановлених або знайдіть ярлик вручну (.exe/.lnk). На картці: іконка, назва, три перемикачі (майстерний, запуск, вимкнення) і два циферблати — час запуску та закриття програми. Вимкнена картка приглушується й не виконує таймери. Порядок карток змінюється перетягуванням (ЛКМ) і зберігається. «Вибрати» вмикає масове видалення: прапорці, перемикач «Вибрати все» та «Видалити вибрані» з підтвердженням; хрестик видаляє картку з підтвердженням.</sys:String>
@@ -101,4 +101,29 @@
 
     <sys:String x:Key="L_UninstallDoneText">Програму повністю видалено.</sys:String>
     <sys:String x:Key="L_UninstallDoneSub">Клацніть будь-де, щоб закрити.</sys:String>
+
+    <sys:String x:Key="L_CheckUpdates">Перевірити оновлення</sys:String>
+    <sys:String x:Key="L_UpdateAvailable">Доступна нова версія</sys:String>
+    <sys:String x:Key="L_UpdateNow">Оновити</sys:String>
+    <sys:String x:Key="L_UpdateSkip">Пропустити версію</sys:String>
+    <sys:String x:Key="L_UpdateChecking">Перевірка…</sys:String>
+    <sys:String x:Key="L_UpdateUpToDate">У вас найновіша версія</sys:String>
+    <sys:String x:Key="L_UpdateNoNetwork">Немає доступу до мережі</sys:String>
+    <sys:String x:Key="L_UpdateError">Не вдалося перевірити оновлення</sys:String>
+    <sys:String x:Key="L_UpdateNotesTitle">Що нового</sys:String>
+    <sys:String x:Key="L_UpdateWindowTitle">Оновлення</sys:String>
+    <sys:String x:Key="L_UpdateWarningTitle">Підтвердити оновлення</sys:String>
+    <sys:String x:Key="L_UpdateWarningText">Програму буде закрито та оновлено до версії {0}. Активні таймери й будильники зупиняться. Windows може запитати права адміністратора (UAC) і показати попередження SmartScreen для непідписаного інсталятора. Продовжити?</sys:String>
+    <sys:String x:Key="L_UpdateDownloading">Завантаження інсталятора…</sys:String>
+    <sys:String x:Key="L_UpdateDownloadFailed">Не вдалося завантажити оновлення. Відкрити сторінку релізу?</sys:String>
+    <sys:String x:Key="L_UpdateOpenPage">Відкрити сторінку завантаження</sys:String>
+    <sys:String x:Key="L_UpdateChoiceTitle">Вибір пакета оновлення</sys:String>
+    <sys:String x:Key="L_UpdateChoiceText">.NET 8 Desktop Runtime не знайдено на цьому ПК. Оберіть пакет:</sys:String>
+    <sys:String x:Key="L_UpdateFattyName">Fatty — повна</sys:String>
+    <sys:String x:Key="L_UpdateFattyDesc">Містить усе (~221 МБ). .NET не потрібен — надійний вибір.</sys:String>
+    <sys:String x:Key="L_UpdateMiniName">Mini — легка</sys:String>
+    <sys:String x:Key="L_UpdateMiniDesc">Мале завантаження, але інсталятору потрібен .NET 8 Desktop Runtime.</sys:String>
+    <sys:String x:Key="L_UpdateGetRuntime">Завантажити .NET 8 Desktop Runtime</sys:String>
+    <sys:String x:Key="L_UpdateTrayBalloon">Доступна нова версія {0}. Натисніть, щоб переглянути.</sys:String>
+    <sys:String x:Key="L_UpdatePortable">Автоматичне оновлення доступне лише для встановленої програми. Відкрити сторінку завантаження?</sys:String>
 </ResourceDictionary>

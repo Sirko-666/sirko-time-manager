@@ -93,7 +93,7 @@
     <sys:String x:Key="L_AboutDeveloper">Developer</sys:String>
     <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) is a compact timer for Windows: countdowns, scheduled actions, alarms, application timers and handy settings. Minimal interface, black &amp; white themes, three languages.</sys:String>
     <sys:String x:Key="L_AboutFeaturesTitle">Features</sys:String>
-    <sys:String x:Key="L_AboutCountdown">An iOS-style dial: scroll the mouse wheel over hours or minutes to set the time. On the right pick an action — Sleep or Shutdown. “Start” begins the countdown; “Pause/Resume” and “Reset” are available while running. Keep durations via “Save” and apply them from “Saved” (multi-select deletion is supported). When the countdown ends, the chosen action runs immediately.</sys:String>
+    <sys:String x:Key="L_AboutCountdown">An iOS-style dial: scroll the mouse wheel or drag over hours or minutes to set the time. On the right pick an action — Sleep or Shutdown. “Start” begins the countdown; “Pause/Resume” and “Reset” are available while running. Keep durations via “Save” and apply them from “Saved” (multi-select deletion is supported). When the countdown ends, the chosen action runs immediately.</sys:String>
     <sys:String x:Key="L_AboutSchedule">Schedule Sleep or Shutdown for an exact time of day. If that time already passed today, the next occurrence (tomorrow) is used. After scheduling, the dial locks and shows a status line; “Cancel” unarms it. Frequently used times can be saved and picked from “Saved”.</sys:String>
     <sys:String x:Key="L_AboutAlarms">Create alarms: dial, weekday repeat and an optional label. The row switch enables or disables each alarm; one-shot alarms turn themselves off after firing. Click a row to edit, use “Delete” inside the editor. Every alarm can use its own sound: the speaker icon opens the sound list (system sounds plus Windows Media wavs), “Add sound…” imports a WAV/MP3 and the cross removes imported ones. When an alarm fires the sound plays for a minute, then repeats every 5 minutes (long tracks play fully) until you press “Stop”.</sys:String>
     <sys:String x:Key="L_AboutApps">Add apps from the installed list or browse for an .exe/.lnk manually. Each card holds the icon, the name, three toggles (master, start, stop) and two dials — the launch and close time of the program. A disabled card is dimmed and runs nothing. Drag cards (hold LMB) to reorder — the order persists. “Select” enables multi-delete with checkboxes: a “Select all” switch and “Delete selected” with confirmation; the trash icon deletes a single card with confirmation.</sys:String>
@@ -101,4 +101,29 @@
 
     <sys:String x:Key="L_UninstallDoneText">The application has been completely removed.</sys:String>
     <sys:String x:Key="L_UninstallDoneSub">Click anywhere to close.</sys:String>
+
+    <sys:String x:Key="L_CheckUpdates">Check for updates</sys:String>
+    <sys:String x:Key="L_UpdateAvailable">New version available</sys:String>
+    <sys:String x:Key="L_UpdateNow">Update</sys:String>
+    <sys:String x:Key="L_UpdateSkip">Skip this version</sys:String>
+    <sys:String x:Key="L_UpdateChecking">Checking…</sys:String>
+    <sys:String x:Key="L_UpdateUpToDate">You have the latest version</sys:String>
+    <sys:String x:Key="L_UpdateNoNetwork">No network access</sys:String>
+    <sys:String x:Key="L_UpdateError">Could not check for updates</sys:String>
+    <sys:String x:Key="L_UpdateNotesTitle">What's new</sys:String>
+    <sys:String x:Key="L_UpdateWindowTitle">Update</sys:String>
+    <sys:String x:Key="L_UpdateWarningTitle">Confirm update</sys:String>
+    <sys:String x:Key="L_UpdateWarningText">The app will close and be updated to version {0}. Running timers and alarms will stop. Windows may ask for administrator rights (UAC) and may show a SmartScreen warning for the unsigned installer. Continue?</sys:String>
+    <sys:String x:Key="L_UpdateDownloading">Downloading the installer…</sys:String>
+    <sys:String x:Key="L_UpdateDownloadFailed">Could not download the update. Open the release page instead?</sys:String>
+    <sys:String x:Key="L_UpdateOpenPage">Open download page</sys:String>
+    <sys:String x:Key="L_UpdateChoiceTitle">Choose the update package</sys:String>
+    <sys:String x:Key="L_UpdateChoiceText">The .NET 8 Desktop Runtime was not found on this PC. Choose a package:</sys:String>
+    <sys:String x:Key="L_UpdateFattyName">Fatty — full</sys:String>
+    <sys:String x:Key="L_UpdateFattyDesc">Bundles everything (~221 MB). No .NET required — the reliable choice.</sys:String>
+    <sys:String x:Key="L_UpdateMiniName">Mini — light</sys:String>
+    <sys:String x:Key="L_UpdateMiniDesc">Small download, but the installer needs the .NET 8 Desktop Runtime.</sys:String>
+    <sys:String x:Key="L_UpdateGetRuntime">Get .NET 8 Desktop Runtime</sys:String>
+    <sys:String x:Key="L_UpdateTrayBalloon">New version {0} is available. Click to view.</sys:String>
+    <sys:String x:Key="L_UpdatePortable">Automatic update is available only for the installed app. Open the download page?</sys:String>
 </ResourceDictionary>

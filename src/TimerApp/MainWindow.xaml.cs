@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using TimerApp.Controls;
 using TimerApp.Models;
 using TimerApp.Services;
@@ -50,6 +51,11 @@ public partial class MainWindow : Window
     private bool _realExit;
     private bool _balloonShown;
 
+    // In-app updates.
+    private readonly DispatcherTimer _updateTimer = new();
+    private UpdateInfo? _pendingUpdate;
+    private bool _updateBusy;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -88,6 +94,7 @@ public partial class MainWindow : Window
 
         CreateTrayIcon();
         InitializeSize();
+        InitializeUpdates();
 
         Loaded += (_, _) => ApplyTitleBarTheme();
     }
@@ -182,6 +189,7 @@ public partial class MainWindow : Window
         RebuildAppList();
         UpdateAboutMeta();
         UpdateWindowTitle();
+        RefreshUpdateUi();
         UpdateMinSize();
         EnsureContentFits(fitHeight: false);
     }
@@ -192,6 +200,8 @@ public partial class MainWindow : Window
     {
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         if (version is null) return "0.1.1";
+        if (version.Revision > 0)
+            return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         return version.Build > 0
             ? $"{version.Major}.{version.Minor}.{version.Build}"
             : $"{version.Major}.{version.Minor}";
@@ -205,6 +215,246 @@ public partial class MainWindow : Window
         AboutMeta.Text =
             $"STM · {LocalizationService.Get("L_AboutVersion")} {AppVersion()} · " +
             $"{LocalizationService.Get("L_AboutDeveloper")}: Serhii Sirenko (Sirko)";
+    }
+
+    // -------- Updates --------
+
+    private void InitializeUpdates()
+    {
+        _updateTimer.Interval = TimeSpan.FromHours(1);
+        _updateTimer.Tick += async (_, _) => await CheckForUpdatesAsync(silent: true);
+        _updateTimer.Start();
+
+        RefreshUpdateUi();
+
+        // First silent check shortly after start, so startup stays instant.
+        Loaded += async (_, _) =>
+        {
+            await Task.Delay(TimeSpan.FromSeconds(4));
+            await CheckForUpdatesAsync(silent: true);
+        };
+    }
+
+    private async void OnCheckUpdatesClick(object sender, RoutedEventArgs e)
+    {
+        CheckUpdatesButton.IsEnabled = false;
+        ShowStatus(LocalizationService.Get("L_UpdateChecking"));
+        await CheckForUpdatesAsync(silent: false);
+        ShowStatus(string.Empty);
+        CheckUpdatesButton.IsEnabled = true;
+    }
+
+    private void OnUpdateActionClick(object sender, MouseButtonEventArgs e)
+    {
+        if (_pendingUpdate is not null)
+            StartUpdateFlow(_pendingUpdate);
+    }
+
+    private async Task CheckForUpdatesAsync(bool silent)
+    {
+        if (_updateBusy) return;
+        _updateBusy = true;
+        try
+        {
+            UpdateSettings settings = UpdateStore.Load();
+            settings.LastCheckUtc = DateTime.UtcNow.ToString("o");
+            UpdateStore.Save(settings);
+
+            string languageKey = LocalizationService.ToKey(LocalizationService.Current);
+            UpdateCheckResult result = await UpdateService.CheckAsync(languageKey);
+
+            switch (result.Status)
+            {
+                case UpdateStatus.Available when result.Info is not null:
+                    _pendingUpdate = result.Info;
+                    RefreshUpdateUi();
+                    if (silent) MaybeNotify(result.Info);
+                    else ShowUpdateAvailable(result.Info);
+                    break;
+
+                case UpdateStatus.UpToDate:
+                    _pendingUpdate = null;
+                    RefreshUpdateUi();
+                    if (!silent) ShowMessage(LocalizationService.Get("L_UpdateUpToDate"));
+                    break;
+
+                case UpdateStatus.NoNetwork:
+                    if (!silent) ShowMessage(LocalizationService.Get("L_UpdateNoNetwork"));
+                    break;
+
+                default:
+                    if (!silent) ShowMessage(LocalizationService.Get("L_UpdateError"));
+                    break;
+            }
+        }
+        catch
+        {
+            if (!silent) ShowMessage(LocalizationService.Get("L_UpdateError"));
+        }
+        finally
+        {
+            _updateBusy = false;
+        }
+    }
+
+    private void ShowUpdateAvailable(UpdateInfo info)
+    {
+        var window = new UpdateWindow(info) { Owner = this };
+        window.ShowDialog();
+
+        switch (window.Result)
+        {
+            case UpdateDialogResult.Update:
+                StartUpdateFlow(info);
+                break;
+
+            case UpdateDialogResult.Skip:
+                UpdateSettings settings = UpdateStore.Load();
+                settings.SkippedVersion = info.Tag;
+                UpdateStore.Save(settings);
+                _pendingUpdate = null;
+                RefreshUpdateUi();
+                ShowStatus(string.Empty);
+                break;
+        }
+    }
+
+    private async void StartUpdateFlow(UpdateInfo info)
+    {
+        try
+        {
+            // Portable / dev copy: cannot install over itself — offer the release page.
+            if (!UpdateService.IsRunningFromInstall())
+            {
+                var portable = new ConfirmWindow(
+                    LocalizationService.Get("L_UpdateWindowTitle"),
+                    LocalizationService.Get("L_UpdatePortable"),
+                    confirmText: LocalizationService.Get("L_UpdateOpenPage")) { Owner = this };
+                if (portable.ShowDialog() == true)
+                    OpenUrl(info.ReleaseUrl);
+                return;
+            }
+
+            var warning = new ConfirmWindow(
+                LocalizationService.Get("L_UpdateWarningTitle"),
+                string.Format(LocalizationService.Get("L_UpdateWarningText"), info.Tag),
+                dangerButton: true,
+                confirmText: LocalizationService.Get("L_UpdateNow")) { Owner = this };
+            if (warning.ShowDialog() != true) return;
+
+            UpdatePackage package;
+            if (UpdateService.IsDotNet8DesktopRuntimeInstalled())
+            {
+                package = UpdatePackage.Mini;
+            }
+            else
+            {
+                var choice = new UpdateChoiceWindow { Owner = this };
+                if (choice.ShowDialog() != true) return;
+                package = choice.Package;
+            }
+
+            string? url = package == UpdatePackage.Fatty ? info.FattyUrl : info.MiniUrl;
+            if (string.IsNullOrEmpty(url))
+            {
+                OpenUrl(info.ReleaseUrl);
+                return;
+            }
+
+            ShowStatus(LocalizationService.Get("L_UpdateDownloading"));
+            string fileName = package == UpdatePackage.Fatty ? "STM-Setup-Fatty.exe" : "STM-Setup-Mini.exe";
+            string dest = Path.Combine(Path.GetTempPath(), fileName);
+            bool ok = await UpdateService.DownloadAsync(url, dest);
+            ShowStatus(string.Empty);
+
+            if (!ok)
+            {
+                var failed = new ConfirmWindow(
+                    LocalizationService.Get("L_UpdateWindowTitle"),
+                    LocalizationService.Get("L_UpdateDownloadFailed"),
+                    confirmText: LocalizationService.Get("L_UpdateOpenPage")) { Owner = this };
+                if (failed.ShowDialog() == true)
+                    OpenUrl(info.ReleaseUrl);
+                return;
+            }
+
+            // Run the normal installer wizard, handing over the install directory.
+            string? dir = UpdateService.GetInstalledDir();
+            string args = string.IsNullOrEmpty(dir) ? string.Empty : $"--dir \"{dir}\"";
+            Process.Start(new ProcessStartInfo(dest, args) { UseShellExecute = true });
+        }
+        catch
+        {
+            OpenUrl(info.ReleaseUrl);
+        }
+    }
+
+    private void MaybeNotify(UpdateInfo info)
+    {
+        if (_trayIcon is null) return;
+
+        UpdateSettings settings = UpdateStore.Load();
+        if (settings.SkippedVersion == info.Tag) return;
+        if (settings.NotifiedVersion == info.Tag) return;
+
+        _trayIcon.BalloonTipTitle = "STM";
+        _trayIcon.BalloonTipText = string.Format(
+            LocalizationService.Get("L_UpdateTrayBalloon"), info.Tag);
+        _trayIcon.ShowBalloonTip(6000);
+
+        settings.NotifiedVersion = info.Tag;
+        UpdateStore.Save(settings);
+    }
+
+    private void RefreshUpdateUi()
+    {
+        UpdateSettings settings = UpdateStore.Load();
+        bool show = _pendingUpdate is not null && settings.SkippedVersion != _pendingUpdate.Tag;
+
+        if (!show || _pendingUpdate is null)
+        {
+            UpdateExpander.Visibility = Visibility.Collapsed;
+            return;
+        }
+
+        UpdateExpander.Visibility = Visibility.Visible;
+        UpdateVersionText.Text =
+            $"{LocalizationService.Get("L_UpdateAvailable")}: {_pendingUpdate.Tag}";
+        UpdateNotesText.Text = _pendingUpdate.Notes;
+        UpdateNotesText.Visibility = string.IsNullOrWhiteSpace(_pendingUpdate.Notes)
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+    }
+
+    private void ShowStatus(string text)
+    {
+        UpdateStatusText.Text = text;
+        UpdateStatusText.Visibility = string.IsNullOrEmpty(text)
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+    }
+
+    private void ShowMessage(string text) =>
+        new MessageWindow(LocalizationService.Get("L_UpdateWindowTitle"), text)
+        { Owner = this }.ShowDialog();
+
+    private void ShowAboutTab()
+    {
+        ActivateFromTray();
+        OnTabChange(TabAbout, new RoutedEventArgs());
+    }
+
+    private static void OpenUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url)) return;
+        try
+        {
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+        }
+        catch
+        {
+            // best-effort
+        }
     }
 
     private void UpdateMinSize()
@@ -1303,6 +1553,7 @@ public partial class MainWindow : Window
 
         _trayIcon.ContextMenuStrip = _trayMenu;
         _trayIcon.DoubleClick += (_, _) => ActivateFromTray();
+        _trayIcon.BalloonTipClicked += (_, _) => Dispatcher.BeginInvoke(ShowAboutTab);
         _trayIcon.MouseClick += (s, e) =>
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)

@@ -3,7 +3,7 @@
 > 🌐 **This README is available in three languages:**
 > 🇬🇧 [English](#english) · 🇺🇦 [Українська](#українська) · 🇷🇺 [Русский](#русский)
 >
-> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2** · Windows 10/11
+> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2.1** · Windows 10/11
 
 ---
 
@@ -15,7 +15,7 @@ A minimalistic time manager for Windows in a “dark paper” style: countdown t
 
 | Tab | What it does |
 |---|---|
-**Countdown** | iOS-style mouse-wheel dial, Sleep / Shutdown action, Pause / Resume, saved timers
+**Countdown** | iOS-style dial (mouse wheel or drag), Sleep / Shutdown action, Pause / Resume, saved timers
 **Scheduled** | Sleep / Shutdown at an exact time of day; if that time already passed — tomorrow
 **Alarms** | Weekday repeat, label, any sound (system / Windows Media / own WAV·MP3), ring pattern: 1 minute, then 15 s every 5 minutes until stopped
 **App timers** | App cards: launch & close by schedule, 3 toggles (master / start / stop), drag-to-reorder, multi-delete
@@ -77,7 +77,7 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 
 | Вкладка | Що вміє |
 |---|---|
-**Зворотний відлік** | Циферблат у стилі iOS (прокрутка колесом), Сон / Вимкнення, Пауза / Продовжити, збережені таймери
+**Зворотний відлік** | Циферблат у стилі iOS (колесо миші або перетягування), Сон / Вимкнення, Пауза / Продовжити, збережені таймери
 **За розкладом** | Сон / Вимкнення на точну добу; якщо час минув — на наступний день
 **Будильники** | Повтор у дні тижня, назва, будь-який звук (системні / Windows Media / свої WAV·MP3), цикл: 1 хвилину, далі кожні 5 хвилин до «Стоп»
 **Таймер застосунків** | Картки застосунків: запуск і вимкнення за розкладом, 3 перемикачі (майстерний/запуск/вимкнення), drag-сортування, масове видалення
@@ -111,7 +111,7 @@ STM також з'являється в **«Параметри → Програ�
 
 | Вкладка | Что умеет |
 |---|---|
-**Обратный отсчёт** | Циферблат в стиле iOS (прокрутка колесом), Сон / Выключение, Пауза / Продолжить, сохранённые таймеры
+**Обратный отсчёт** | Циферблат в стиле iOS (колесо мыши или перетаскивание), Сон / Выключение, Пауза / Продолжить, сохранённые таймеры
 **По расписанию** | Сон / Выключение на точное время суток; если время прошло — на следующий день
 **Будильники** | Повтор по дням недели, название, любой звук (системные / Windows Media / свои WAV·MP3), цикл: 1 минута, затем каждые 5 минут до «Стоп»
 **Таймер приложений** | Карточки приложений: запуск и закрытие по времени, 3 переключателя (мастер/запуск/выключение), перетаскивание, массовое удаление
@@ -138,6 +138,12 @@ STM также появляется в **«Параметры → Приложе
 ---
 
 ## Changelog
+
+### v0.1.2.1
+- **Reworked time dial** (`TimeDial`): digits now glide smoothly between rows instead of jumping; edge rows fade out toward the borders.
+- **Drag input**: hold the left mouse button and move vertically to spin the dial (mouse wheel still works).
+- Soft start (speed ramps in gently), no end inertia — releasing stops the dial exactly on the nearest value, which eases into the center.
+- Countdown and schedule dials lost the visible frame; the whole hours/minutes column is now scrollable, not just the digits.
 
 ### v0.1.2
 - STM now registers itself in Windows **Apps & Features** (Settings → Apps → Installed apps) with name, version, publisher, icon and size.

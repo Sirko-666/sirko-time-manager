@@ -93,7 +93,7 @@
     <sys:String x:Key="L_AboutDeveloper">Разработчик</sys:String>
     <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) — компактный таймер для Windows: обратный отсчёт, действия по расписанию, будильники, таймеры приложений и удобные настройки. Минималистичный интерфейс, чёрная и белая темы, три языка.</sys:String>
     <sys:String x:Key="L_AboutFeaturesTitle">Возможности</sys:String>
-    <sys:String x:Key="L_AboutCountdown">Циферблат в стиле iOS: прокрутите колесо мыши над часами или минутами, чтобы задать время. Справа выберите действие — Сон или Выключение ПК. «Старт» запускает отсчёт; во время работы доступны «Пауза/Продолжить» и «Сброс». Текущее значение можно «Сохранить» и быстро применить через «Сохранённые» (с множественным удалением). Когда отсчёт завершается, выбранное действие выполняется сразу.</sys:String>
+    <sys:String x:Key="L_AboutCountdown">Циферблат в стиле iOS: прокрутите колесо мыши или перетащите мышью над часами или минутами, чтобы задать время. Справа выберите действие — Сон или Выключение ПК. «Старт» запускает отсчёт; во время работы доступны «Пауза/Продолжить» и «Сброс». Текущее значение можно «Сохранить» и быстро применить через «Сохранённые» (с множественным удалением). Когда отсчёт завершается, выбранное действие выполняется сразу.</sys:String>
     <sys:String x:Key="L_AboutSchedule">Запланируйте Сон или Выключение на точное время суток. Если это время уже прошло сегодня, действие выполнится на следующий день. После планирования циферблат блокируется и отображается статус («Запланировано 07:30 · Сон»); «Отмена» снимает план. Нужные времена сохраняются через «Сохранить» и выбираются в «Сохранённые».</sys:String>
     <sys:String x:Key="L_AboutAlarms">Создавайте будильники: циферблат, повтор по дням недели и название. Переключатель на строке включает будильник; одноразовый после срабатывания отключается сам. Клик по строке — редактирование, кнопка «Удалить» — удаление в редакторе. У каждого будильника свой звук: значок динамика открывает список (системные звуки + звуки Windows), «Добавить звук…» импортирует WAV/MP3, крестик удаляет импортированные. При срабатывании звук играет 1 минуту, затем повторяется каждые 5 минут (длинные треки проигрываются целиком), пока вы не нажмёте «Стоп».</sys:String>
     <sys:String x:Key="L_AboutApps">Добавьте приложение из списка установленных или найдите ярлык вручную (.exe/.lnk). На карточке: иконка, название, три переключателя (мастер, запуск, выключение) и два циферблата — время запуска и закрытия программы. Отключённая карточка приглушается и таймеры не выполняет. Порядок карточек меняется перетягиванием (ЛКМ) и сохраняется. «Выбрать» включает массовое удаление: галочки, переключатель «Выбрать все» и «Удалить выбранные» с подтверждением; корзина удаляет карточку отдельно с подтверждением.</sys:String>
@@ -101,4 +101,29 @@
 
     <sys:String x:Key="L_UninstallDoneText">Приложение полностью удалено.</sys:String>
     <sys:String x:Key="L_UninstallDoneSub">Кликните в любом месте, чтобы закрыть.</sys:String>
+
+    <sys:String x:Key="L_CheckUpdates">Проверить обновления</sys:String>
+    <sys:String x:Key="L_UpdateAvailable">Доступна новая версия</sys:String>
+    <sys:String x:Key="L_UpdateNow">Обновить</sys:String>
+    <sys:String x:Key="L_UpdateSkip">Пропустить версию</sys:String>
+    <sys:String x:Key="L_UpdateChecking">Проверка…</sys:String>
+    <sys:String x:Key="L_UpdateUpToDate">У вас последняя версия</sys:String>
+    <sys:String x:Key="L_UpdateNoNetwork">Нет доступа к сети</sys:String>
+    <sys:String x:Key="L_UpdateError">Не удалось проверить обновления</sys:String>
+    <sys:String x:Key="L_UpdateNotesTitle">Что нового</sys:String>
+    <sys:String x:Key="L_UpdateWindowTitle">Обновление</sys:String>
+    <sys:String x:Key="L_UpdateWarningTitle">Подтвердить обновление</sys:String>
+    <sys:String x:Key="L_UpdateWarningText">Приложение будет закрыто и обновлено до версии {0}. Активные таймеры и будильники остановятся. Windows может запросить права администратора (UAC) и показать предупреждение SmartScreen для неподписанного установщика. Продолжить?</sys:String>
+    <sys:String x:Key="L_UpdateDownloading">Загрузка установщика…</sys:String>
+    <sys:String x:Key="L_UpdateDownloadFailed">Не удалось загрузить обновление. Открыть страницу релиза?</sys:String>
+    <sys:String x:Key="L_UpdateOpenPage">Открыть страницу загрузки</sys:String>
+    <sys:String x:Key="L_UpdateChoiceTitle">Выбор пакета обновления</sys:String>
+    <sys:String x:Key="L_UpdateChoiceText">.NET 8 Desktop Runtime не найден на этом ПК. Выберите пакет:</sys:String>
+    <sys:String x:Key="L_UpdateFattyName">Fatty — полная</sys:String>
+    <sys:String x:Key="L_UpdateFattyDesc">Содержит всё (~221 МБ). .NET не нужен — надёжный выбор.</sys:String>
+    <sys:String x:Key="L_UpdateMiniName">Mini — лёгкая</sys:String>
+    <sys:String x:Key="L_UpdateMiniDesc">Малая загрузка, но установщику нужен .NET 8 Desktop Runtime.</sys:String>
+    <sys:String x:Key="L_UpdateGetRuntime">Скачать .NET 8 Desktop Runtime</sys:String>
+    <sys:String x:Key="L_UpdateTrayBalloon">Доступна новая версия {0}. Нажмите, чтобы посмотреть.</sys:String>
+    <sys:String x:Key="L_UpdatePortable">Автоматическое обновление доступно только для установленного приложения. Открыть страницу загрузки?</sys:String>
 </ResourceDictionary>

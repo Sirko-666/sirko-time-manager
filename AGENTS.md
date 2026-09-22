@@ -22,6 +22,7 @@ src\StmInstaller\     — self-extracting installer
 make-installer.ps1    — installer build [-Mini] — DO NOT rebuild unless explicitly asked
 build\                — STM-Setup*.exe outputs (not in git)
 docs\PROJECT_MEMORY.md — long-term memory (see project-memory skill)
+docs\ROADMAP.md        — owner's numbered backlog of planned features (update when adding/reworking ideas)
 ```
 Data: `%AppData%\TimerApp\` (alarms.json, app_timers.json, settings.json, Sounds\); autostart registry `HKCU\...\Run\TimerApp` = `"exe" --autostart`.
 

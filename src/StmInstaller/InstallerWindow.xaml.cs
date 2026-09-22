@@ -96,9 +96,11 @@ public partial class InstallerWindow : Window
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         string versionText = version is null
             ? "STM"
-            : version.Build > 0
-                ? $"{version.Major}.{version.Minor}.{version.Build}"
-                : $"{version.Major}.{version.Minor}";
+            : version.Revision > 0
+                ? $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}"
+                : version.Build > 0
+                    ? $"{version.Major}.{version.Minor}.{version.Build}"
+                    : $"{version.Major}.{version.Minor}";
         WelcomeMeta.Text = $"STM · v{versionText} · Serhii Sirenko (Sirko)";
     }
 
@@ -179,11 +181,46 @@ public partial class InstallerWindow : Window
     {
         string dir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TimerApp");
+        string settingsPath = Path.Combine(dir, "settings.json");
+
+        // Updates must not reset the user's theme/language: write only on first install.
+        if (File.Exists(settingsPath)) return;
+
         Directory.CreateDirectory(dir);
         string key = UiLanguage.ToKey(UiLanguage.Current);
-        File.WriteAllText(Path.Combine(dir, "settings.json"),
+        File.WriteAllText(settingsPath,
             System.Text.Json.JsonSerializer.Serialize(
                 new { Theme = "dark", Language = key }));
+    }
+
+    /// <summary>Closes a running TimerApp so its files can be replaced (update case).</summary>
+    private static void CloseRunningApp()
+    {
+        int self = Environment.ProcessId;
+        foreach (Process process in Process.GetProcessesByName("TimerApp"))
+        {
+            if (process.Id == self)
+            {
+                process.Dispose();
+                continue;
+            }
+
+            try
+            {
+                process.CloseMainWindow();
+                process.WaitForExit(700);
+                if (!process.HasExited)
+                    process.Kill(entireProcessTree: true);
+            }
+            catch
+            {
+                // best-effort
+            }
+            finally
+            {
+                process.Dispose();
+            }
+        }
     }
 
     private void DoInstall()
@@ -192,6 +229,9 @@ public partial class InstallerWindow : Window
         {
             Directory.CreateDirectory(_targetDir);
             PersistChosenLanguage();
+
+            // Copying over a running app fails (locked files) — close it first.
+            CloseRunningApp();
 
             string source = FindAppSource();
             int copied = 0;
@@ -248,10 +288,12 @@ public partial class InstallerWindow : Window
 
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         string versionText = version is null
-            ? "0.1.2"
-            : version.Build > 0
-                ? $"{version.Major}.{version.Minor}.{version.Build}"
-                : $"{version.Major}.{version.Minor}";
+            ? "0.1.2.1"
+            : version.Revision > 0
+                ? $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}"
+                : version.Build > 0
+                    ? $"{version.Major}.{version.Minor}.{version.Build}"
+                    : $"{version.Major}.{version.Minor}";
 
         long sizeKb = 0;
         try
