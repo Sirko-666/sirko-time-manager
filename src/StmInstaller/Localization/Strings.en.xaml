@@ -46,7 +46,7 @@
     <sys:String x:Key="L_RunNow">Run STM now</sys:String>
     <sys:String x:Key="L_ConfirmTitle">Confirmation</sys:String>
     <sys:String x:Key="L_Delete">Delete</sys:String>
-    <sys:String x:Key="L_InstallerUninstall">Uninstall app</sys:String>
+    <sys:String x:Key="L_InstallerUninstall">Uninstall</sys:String>
     <sys:String x:Key="L_InstallerUninstallWarning">STM will be removed completely: program files, shortcuts, the autostart entry and data (alarms/timers). Continue?</sys:String>
     <sys:String x:Key="L_UninstallDone">Application removed.</sys:String>
     <sys:String x:Key="L_UninstallNotFound">STM was not found on this PC.</sys:String>

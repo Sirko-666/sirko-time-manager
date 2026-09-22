@@ -46,7 +46,7 @@
     <sys:String x:Key="L_RunNow">Запустить STM сейчас</sys:String>
     <sys:String x:Key="L_ConfirmTitle">Подтверждение</sys:String>
     <sys:String x:Key="L_Delete">Удалить</sys:String>
-    <sys:String x:Key="L_InstallerUninstall">Удалить приложение</sys:String>
+    <sys:String x:Key="L_InstallerUninstall">Удалить</sys:String>
     <sys:String x:Key="L_InstallerUninstallWarning">STM будет удалён полностью: файлы программы, ярлыки, запись автозапуска и данные (будильники/таймеры). Продолжить?</sys:String>
     <sys:String x:Key="L_UninstallDone">Приложение удалено.</sys:String>
     <sys:String x:Key="L_UninstallNotFound">STM не найден на этом компьютере.</sys:String>

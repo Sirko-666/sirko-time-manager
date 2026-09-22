@@ -6,8 +6,19 @@
 
 ---
 
-## 1. In-app updates that never lose user data — `discussed`
+## 1. In-app updates that never lose user data — `done`
 **Goal:** STM can update itself to a newer version while keeping all user timers, alarms, app-timers, sounds and settings — permanently, in every future version.
+
+**Done (v0.1.2.2 / v0.1.2.3):**
+- Hourly check of GitHub Releases (`Sirko-666/sirko-time-manager`) via `UpdateService`; version compared with the assembly version; offline-safe.
+- Tray notification (once per version) + "New version available" block in About + "Check for updates" button in Settings; popups for "latest version", "no network", errors.
+- Release notes support `[uk]/[en]/[ru]` sections in the GitHub release body.
+- Update flow: warning (running timers stop) → .NET 8 Desktop Runtime probe → Fatty/Mini choice (Mini needs the runtime) → download → run the standard installer with `--dir`.
+- State kept in a separate `%AppData%\TimerApp\update.json` (settings.json schema untouched); skipped version and notified version remembered.
+- Installer closes a running STM before copying and skips `settings.json` on updates → user data/theme/language never lost.
+- Portable/dev copies (not registered in Apps & Features) never auto-install; manual check opens the release page.
+
+Deferred: one-click silent installer (`--update`), code signing (SmartScreen), real Windows toast notifications, and `schemaVersion`+migrations groundwork (not needed while updates never touch `%AppData%`).
 
 Why it is low-risk by design:
 - Program files live in `%ProgramFiles%\STM`; user data lives in `%AppData%\TimerApp\` (`alarms.json`, `app_timers.json`, `settings.json`, `Sounds\`). Updating app files never touches user data; only the full uninstaller deletes `AppData` (with confirmation).

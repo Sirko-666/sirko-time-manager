@@ -3,7 +3,7 @@
 > 🌐 **This README is available in three languages:**
 > 🇬🇧 [English](#english) · 🇺🇦 [Українська](#українська) · 🇷🇺 [Русский](#русский)
 >
-> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2.1** · Windows 10/11
+> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2.3** · Windows 10/11
 
 ---
 
@@ -138,6 +138,15 @@ STM также появляется в **«Параметры → Приложе
 ---
 
 ## Changelog
+
+### v0.1.2.3
+- Installer: the footer "Uninstall app" button is shortened to "Uninstall" so it no longer overlaps the "Back" button.
+
+### v0.1.2.2
+- **In-app updates**: hourly check of GitHub Releases with a tray notification (once per version) and a "Check for updates" button in Settings.
+- **New version available** block in About with the release notes and a red "update" link; a confirmation dialog warns that running timers stop.
+- Update flow: detects the .NET 8 Desktop Runtime, offers Fatty (full) or Mini (light), downloads and runs the standard installer; **all user data is preserved**.
+- Installer: closes a running STM before copying files and no longer overwrites `settings.json` (keeps the chosen theme/language).
 
 ### v0.1.2.1
 - **Reworked time dial** (`TimeDial`): digits now glide smoothly between rows instead of jumping; edge rows fade out toward the borders.

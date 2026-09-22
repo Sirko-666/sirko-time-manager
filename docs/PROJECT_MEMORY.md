@@ -55,8 +55,9 @@
 - Two alarms sharing same minute: only first fires (AlarmService global last-fired-minute).
 
 ## Current State
-- Feature backlog: `docs\ROADMAP.md` (owner's ideas, numbered). Item #1 = in-app updates that never lose user data. Item #2 (dial UX/visual) is effectively implemented in v0.1.2.1.
-- Version **0.1.2.1** (dev, not released) — csproj `<Version>` in both projects; app title/About/installer welcome/Uninstall `DisplayVersion` show 4 parts when Revision > 0. Release v0.1.1 published; v0.1.2 installers not yet rebuilt.
+- Feature backlog: `docs\ROADMAP.md` (owner's ideas, numbered). Item #1 (in-app updates) implemented; item #2 (dial UX/visual) implemented.
+- Version **0.1.2.3** — releases published: v0.1.2.1 (never released), **v0.1.2.2** (dial rework + in-app update), **v0.1.2.3** (installer button fix). csproj `<Version>` in both projects; app title/About/installer welcome/Uninstall `DisplayVersion` show 4 parts when Revision > 0.
+- In-app updater: `Services\UpdateService.cs` (GitHub `releases/latest`, notes sections `[uk]/[en]/[ru]`, .NET 8 runtime probe), `UpdateStore` (`%AppData%\TimerApp\update.json`, separate from settings.json), hourly check + one silent check 4 s after start, tray balloon once per version, `UpdateWindow`/`UpdateChoiceWindow`/`MessageWindow`. Update runs the normal installer with `--dir "<install dir>"`; installer closes the running app before copying and skips `settings.json` when it exists.
 - csproj `<Version>` в обоих проектах — единый источник версии (title/about/installer welcome/Uninstall registry).
 - Полноценный uninstaller: инсталлер пишет `HKCU\...\Uninstall\STM` (DisplayName/Version/Publisher/Icon/Size/UninstallString=`TimerApp.exe --uninstall`); приложение в режиме `--uninstall` показывает подтверждение, чистит всё и удаляет запись.
 - Uninstall button lives in «Налаштування» (danger style) and in installer bottom-left; both end with topmost «програму видалено» overlay that closes on any input.
