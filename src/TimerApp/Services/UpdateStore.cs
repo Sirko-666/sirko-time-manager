@@ -16,9 +16,6 @@ public sealed class UpdateSettings
 
     /// <summary>UTC timestamp (round-trip "o") of the last successful check.</summary>
     public string? LastCheckUtc { get; set; }
-
-    /// <summary>Version for which the tray notification was already shown.</summary>
-    public string? NotifiedVersion { get; set; }
 }
 
 public static class UpdateStore

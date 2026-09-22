@@ -386,6 +386,64 @@
         </Setter>
     </Style>
 
+    <!-- Highlighted collapsible block (in-app updates): ink-filled header like primary buttons -->
+    <Style x:Key="UpdateBlockStyle" TargetType="Expander">
+        <Setter Property="FontFamily" Value="{StaticResource MonoFont}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnInkBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <StackPanel Margin="0,0,0,10">
+                        <ToggleButton Cursor="Hand"
+                                      HorizontalContentAlignment="Stretch"
+                                      Foreground="{DynamicResource OnInkBrush}"
+                                      Content="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border x:Name="Bd" Background="{DynamicResource InkBrush}"
+                                            BorderBrush="{DynamicResource InkBrush}" BorderThickness="1"
+                                            CornerRadius="8" Padding="14,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ContentPresenter VerticalAlignment="Center" />
+                                            <Path x:Name="Chevron" Grid.Column="1"
+                                                  Data="M0,0 L4.5,4.5 9,0"
+                                                  Stroke="{DynamicResource OnInkBrush}" StrokeThickness="1.6"
+                                                  HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource InkHoverBrush}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource InkHoverBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter TargetName="Chevron" Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="90" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <ContentPresenter x:Name="ExpandSite" Margin="16,10,4,4" Visibility="Collapsed" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Text input -->
     <Style x:Key="InputStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource MonoFont}" />

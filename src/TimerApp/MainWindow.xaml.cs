@@ -55,6 +55,7 @@ public partial class MainWindow : Window
     private readonly DispatcherTimer _updateTimer = new();
     private UpdateInfo? _pendingUpdate;
     private bool _updateBusy;
+    private bool _updateToastShown;
 
     public MainWindow()
     {
@@ -222,35 +223,55 @@ public partial class MainWindow : Window
     private void InitializeUpdates()
     {
         _updateTimer.Interval = TimeSpan.FromHours(1);
-        _updateTimer.Tick += async (_, _) => await CheckForUpdatesAsync(silent: true);
+        // Hourly check: refresh the in-app status silently, no toast.
+        _updateTimer.Tick += async (_, _) => await CheckForUpdatesAsync(silent: true, allowToast: false);
         _updateTimer.Start();
 
         RefreshUpdateUi();
 
-        // First silent check shortly after start, so startup stays instant.
+        // On launch (incl. Windows autostart): show the toast 4 s after start
+        // if an update is available and the version was not skipped.
         Loaded += async (_, _) =>
         {
             await Task.Delay(TimeSpan.FromSeconds(4));
-            await CheckForUpdatesAsync(silent: true);
+            await CheckForUpdatesAsync(silent: true, allowToast: true);
         };
     }
 
     private async void OnCheckUpdatesClick(object sender, RoutedEventArgs e)
     {
+        // If an update is already known, open the update window instead of re-checking.
+        if (_pendingUpdate is not null &&
+            UpdateStore.Load().SkippedVersion != _pendingUpdate.Tag)
+        {
+            ShowUpdateAvailable(_pendingUpdate);
+            return;
+        }
+
         CheckUpdatesButton.IsEnabled = false;
         ShowStatus(LocalizationService.Get("L_UpdateChecking"));
-        await CheckForUpdatesAsync(silent: false);
+        await CheckForUpdatesAsync(silent: false, allowToast: false);
         ShowStatus(string.Empty);
         CheckUpdatesButton.IsEnabled = true;
     }
 
-    private void OnUpdateActionClick(object sender, MouseButtonEventArgs e)
+    private void OnUpdateNowClick(object sender, RoutedEventArgs e)
     {
         if (_pendingUpdate is not null)
             StartUpdateFlow(_pendingUpdate);
     }
 
-    private async Task CheckForUpdatesAsync(bool silent)
+    private void OnUpdateSkipClick(object sender, RoutedEventArgs e)
+    {
+        if (_pendingUpdate is null) return;
+        UpdateSettings settings = UpdateStore.Load();
+        settings.SkippedVersion = _pendingUpdate.Tag;
+        UpdateStore.Save(settings);
+        _pendingUpdate = null;
+        RefreshUpdateUi();
+    }
+
+    private async Task CheckForUpdatesAsync(bool silent, bool allowToast)
     {
         if (_updateBusy) return;
         _updateBusy = true;
@@ -268,8 +289,8 @@ public partial class MainWindow : Window
                 case UpdateStatus.Available when result.Info is not null:
                     _pendingUpdate = result.Info;
                     RefreshUpdateUi();
-                    if (silent) MaybeNotify(result.Info);
-                    else ShowUpdateAvailable(result.Info);
+                    if (!silent) ShowUpdateAvailable(result.Info);
+                    else if (allowToast) MaybeNotify(result.Info);
                     break;
 
                 case UpdateStatus.UpToDate:
@@ -391,19 +412,16 @@ public partial class MainWindow : Window
 
     private void MaybeNotify(UpdateInfo info)
     {
-        if (_trayIcon is null) return;
+        if (_updateToastShown) return;
 
         UpdateSettings settings = UpdateStore.Load();
         if (settings.SkippedVersion == info.Tag) return;
-        if (settings.NotifiedVersion == info.Tag) return;
 
-        _trayIcon.BalloonTipTitle = "STM";
-        _trayIcon.BalloonTipText = string.Format(
-            LocalizationService.Get("L_UpdateTrayBalloon"), info.Tag);
-        _trayIcon.ShowBalloonTip(6000);
-
-        settings.NotifiedVersion = info.Tag;
-        UpdateStore.Save(settings);
+        // Custom toast near the tray; shown on each launch while an update is
+        // available, unless the user skipped that version.
+        _updateToastShown = true;
+        string message = string.Format(LocalizationService.Get("L_UpdateTrayBalloon"), info.Tag);
+        new ToastWindow("STM", message, ShowAboutTab).Show();
     }
 
     private void RefreshUpdateUi()
@@ -414,6 +432,8 @@ public partial class MainWindow : Window
         if (!show || _pendingUpdate is null)
         {
             UpdateExpander.Visibility = Visibility.Collapsed;
+            CheckUpdatesButton.Content = LocalizationService.Get("L_CheckUpdates");
+            CheckUpdatesButton.Style = (Style)FindResource("GhostButtonStyle");
             return;
         }
 
@@ -424,6 +444,10 @@ public partial class MainWindow : Window
         UpdateNotesText.Visibility = string.IsNullOrWhiteSpace(_pendingUpdate.Notes)
             ? Visibility.Collapsed
             : Visibility.Visible;
+
+        // Settings button becomes a highlighted "New version available" action.
+        CheckUpdatesButton.Content = LocalizationService.Get("L_UpdateAvailable");
+        CheckUpdatesButton.Style = (Style)FindResource("PrimaryButtonStyle");
     }
 
     private void ShowStatus(string text)
@@ -1553,7 +1577,6 @@ public partial class MainWindow : Window
 
         _trayIcon.ContextMenuStrip = _trayMenu;
         _trayIcon.DoubleClick += (_, _) => ActivateFromTray();
-        _trayIcon.BalloonTipClicked += (_, _) => Dispatcher.BeginInvoke(ShowAboutTab);
         _trayIcon.MouseClick += (s, e) =>
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)

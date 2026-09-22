@@ -3,7 +3,7 @@
 > 🌐 **This README is available in three languages:**
 > 🇬🇧 [English](#english) · 🇺🇦 [Українська](#українська) · 🇷🇺 [Русский](#русский)
 >
-> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2.3** · Windows 10/11
+> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2.4** · Windows 10/11
 
 ---
 
@@ -138,6 +138,11 @@ STM также появляется в **«Параметры → Приложе
 ---
 
 ## Changelog
+
+### v0.1.2.4
+- Update notification is now a small toast near the tray (shown on every launch while an update is available, unless the version is skipped).
+- The Settings button turns into a highlighted **"New version available"** when an update exists.
+- The About block now offers **Update** (primary) and **Skip this version** buttons.
 
 ### v0.1.2.3
 - Installer: the footer "Uninstall app" button is shortened to "Uninstall" so it no longer overlaps the "Back" button.
