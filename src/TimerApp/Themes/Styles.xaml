@@ -444,6 +444,34 @@
         </Setter>
     </Style>
 
+    <!-- Thin-line volume slider -->
+    <Style x:Key="VolumeSliderStyle" TargetType="Slider">
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid Background="Transparent">
+                        <Border Height="3" CornerRadius="1.5" VerticalAlignment="Center"
+                                Background="{DynamicResource HairlineBrush}" />
+                        <Track x:Name="PART_Track" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Track.Thumb>
+                                <Thumb Width="12" Height="12">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Ellipse Fill="{DynamicResource InkBrush}" />
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Text input -->
     <Style x:Key="InputStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource MonoFont}" />

@@ -34,13 +34,11 @@ public sealed class AlarmService
             now.Date == _lastFiredMinute.Date)
             return;
 
-        int dayIndex = ((int)now.DayOfWeek + 6) % 7; // Monday-first
-
         foreach (Alarm alarm in _alarms)
         {
             if (!alarm.Enabled) continue;
             if (alarm.Hour != now.Hour || alarm.Minute != now.Minute) continue;
-            if (alarm.IsRepeating && !alarm.Days[dayIndex]) continue;
+            if (!alarm.MatchesDate(now)) continue;
 
             _lastFiredMinute = now;
             Triggered?.Invoke(alarm);

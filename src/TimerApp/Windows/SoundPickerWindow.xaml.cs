@@ -16,6 +16,22 @@ public partial class SoundPickerWindow : Window
     {
         InitializeComponent();
         BuildList(currentKey);
+        VolumeSlider.Value = SoundService.Volume;
+        SoundService.VolumeChanged += OnSoundVolumeChanged;
+        _initializing = false;
+    }
+
+    private void OnVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (_initializing) return;
+        SoundService.Volume = e.NewValue;
+    }
+
+    private void OnSoundVolumeChanged(double value)
+    {
+        if (Math.Abs(VolumeSlider.Value - value) < 0.0005) return;
+        _initializing = true;
+        VolumeSlider.Value = value;
         _initializing = false;
     }
 
@@ -52,7 +68,7 @@ public partial class SoundPickerWindow : Window
         var item = new ListBoxItem
         {
             Tag = key,
-            Padding = new Thickness(6, 5, 6, 5),
+            Padding = new Thickness(8, 5, 8, 5),
             Margin = isUser ? new Thickness(0, 3, 0, 9) : new Thickness(0, 0, 0, 0)
         };
 
@@ -173,6 +189,7 @@ public partial class SoundPickerWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
+        SoundService.VolumeChanged -= OnSoundVolumeChanged;
         SoundService.Stop();
         base.OnClosed(e);
     }

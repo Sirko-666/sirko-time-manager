@@ -8,13 +8,14 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
-    <Version>0.1.2.4</Version>
+    <Version>0.1.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
     <Resource Include="Assets\app.ico" />
     <Resource Include="Assets\icon.png" />
+    <EmbeddedResource Include="Assets\Sounds\*.mp3" />
   </ItemGroup>
 
 </Project>

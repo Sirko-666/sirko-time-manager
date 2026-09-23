@@ -14,6 +14,7 @@ public static class SettingsStore
     private static readonly string SavedCountdownFile = Path.Combine(DataDir, "saved_countdown.json");
     private static readonly string SavedScheduleFile = Path.Combine(DataDir, "saved_schedule.json");
     private static readonly string AppSettingsFile = Path.Combine(DataDir, "settings.json");
+    private static readonly string SoundSettingsFile = Path.Combine(DataDir, "sound.json");
     private static readonly string AlarmsFile = Path.Combine(DataDir, "alarms.json");
     private static readonly string AppTimersFile = Path.Combine(DataDir, "app_timers.json");
 
@@ -112,6 +113,40 @@ public static class SettingsStore
             Directory.CreateDirectory(DataDir);
             File.WriteAllText(AppSettingsFile,
                 JsonSerializer.Serialize(new AppSettings { Theme = theme, Language = language }));
+        }
+        catch
+        {
+            // best-effort
+        }
+    }
+
+    private sealed class SoundSettings
+    {
+        public double Volume { get; set; } = 0.6;
+    }
+
+    /// <summary>Alarm volume (0..1) stored separately so the settings.json schema is untouched.</summary>
+    public static double LoadVolume()
+    {
+        try
+        {
+            if (!File.Exists(SoundSettingsFile)) return 0.6;
+            var s = JsonSerializer.Deserialize<SoundSettings>(File.ReadAllText(SoundSettingsFile));
+            return Math.Clamp(s?.Volume ?? 0.6, 0.0, 1.0);
+        }
+        catch
+        {
+            return 0.6;
+        }
+    }
+
+    public static void SaveVolume(double volume)
+    {
+        try
+        {
+            Directory.CreateDirectory(DataDir);
+            File.WriteAllText(SoundSettingsFile,
+                JsonSerializer.Serialize(new SoundSettings { Volume = Math.Clamp(volume, 0.0, 1.0) }));
         }
         catch
         {

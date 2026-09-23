@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>StmInstaller</AssemblyName>
     <ApplicationIcon>app.ico</ApplicationIcon>
-    <Version>0.1.2.4</Version>
+    <Version>0.1.3</Version>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 

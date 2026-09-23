@@ -1,5 +1,5 @@
 using System.IO;
-using System.Media;
+using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Threading;
 using TimerApp.Models;
@@ -9,36 +9,118 @@ namespace TimerApp.Services;
 /// <summary>
 /// Catalog and playback of alarm sounds.
 /// A key is one of:
-///   "sys:&lt;Name&gt;"   — a built-in Windows sound,
-///   "file:&lt;name&gt;"  — a wave file from %WinDir%\Media,
-///   "user:&lt;name&gt;"  — a user-imported wav/mp3 in %AppData%\TimerApp\Sounds.
+///   "app:&lt;name&gt;"    — a built-in STM sound (embedded, extracted to %AppData%\TimerApp\Sounds\BuiltIn),
+///   "user:&lt;name&gt;"   — a user-imported wav/mp3 in %AppData%\TimerApp\Sounds.
+/// Any other (legacy) key falls back to the default built-in sound.
 /// </summary>
 public static class SoundService
 {
     public const string DefaultKey = Alarm.DefaultSoundKey;
 
-    private static readonly string[] SystemNames =
-        ["Asterisk", "Beep", "Exclamation", "Hand", "Question"];
-
-    private static readonly string MediaDir = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media");
+    private const string ResourcePrefix = "TimerApp.Assets.Sounds.";
 
     public static readonly string UserDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "TimerApp", "Sounds");
 
+    private static readonly string BuiltInDir = Path.Combine(UserDir, "BuiltIn");
+
     private static MediaPlayer? _media;
-    private static SoundPlayer? _player;
     private static bool _looping;
+
+    private static double _volume = -1;
+
+    /// <summary>Alarm playback volume (0..1), relative to the Windows system volume.</summary>
+    public static double Volume
+    {
+        get
+        {
+            if (_volume < 0) _volume = SettingsStore.LoadVolume();
+            return _volume;
+        }
+        set
+        {
+            double v = Math.Clamp(value, 0.0, 1.0);
+            if (Math.Abs(v - _volume) < 0.0005) return;
+            _volume = v;
+            SettingsStore.SaveVolume(v);
+            if (_media is not null)
+            {
+                try { _media.Volume = v; } catch { /* ignore */ }
+            }
+            VolumeChanged?.Invoke(v);
+        }
+    }
+
+    /// <summary>Raised when Volume changes, so all sliders can stay in sync.</summary>
+    public static event Action<double>? VolumeChanged;
 
     public static IReadOnlyList<string> All()
     {
         var keys = new List<string>();
+        keys.AddRange(BuiltInKeys());
         keys.AddRange(UserKeys());
-        keys.AddRange(SystemNames.Select(n => "sys:" + n));
-        keys.AddRange(WindowsKeys());
         return keys;
     }
+
+    /// <summary>Keys of the embedded built-in sounds (also extracts them on demand).</summary>
+    private static IEnumerable<string> BuiltInKeys()
+    {
+        try
+        {
+            EnsureBuiltIn();
+            return Assembly.GetExecutingAssembly()
+                .GetManifestResourceNames()
+                .Where(r => r.StartsWith(ResourcePrefix, StringComparison.Ordinal))
+                .Select(r => r[ResourcePrefix.Length..])
+                .Where(IsSupportedName)
+                .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                .Select(n => "app:" + n);
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    /// <summary>Extracts embedded built-in sounds into %AppData%\TimerApp\Sounds\BuiltIn (missing/changed only).</summary>
+    private static void EnsureBuiltIn()
+    {
+        try
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string[] resources = assembly.GetManifestResourceNames()
+                .Where(r => r.StartsWith(ResourcePrefix, StringComparison.Ordinal))
+                .ToArray();
+            if (resources.Length == 0) return;
+
+            Directory.CreateDirectory(BuiltInDir);
+            foreach (string resource in resources)
+            {
+                string name = resource[ResourcePrefix.Length..];
+                if (!IsSupportedName(name)) continue;
+
+                string target = Path.Combine(BuiltInDir, name);
+                using Stream? source = assembly.GetManifestResourceStream(resource);
+                if (source is null) continue;
+
+                // Re-extract when the file is missing or the embedded content changed.
+                if (File.Exists(target) && new FileInfo(target).Length == source.Length)
+                    continue;
+
+                using FileStream file = File.Create(target);
+                source.CopyTo(file);
+            }
+        }
+        catch
+        {
+            // Best-effort; a missing built-in sound falls back to the default.
+        }
+    }
+
+    private static bool IsSupportedName(string name) =>
+        name.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) ||
+        name.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase);
 
     private static IEnumerable<string> UserKeys()
     {
@@ -58,43 +140,36 @@ public static class SoundService
         }
     }
 
-    private static IEnumerable<string> WindowsKeys()
-    {
-        try
-        {
-            if (!Directory.Exists(MediaDir)) return [];
-            return Directory.EnumerateFiles(MediaDir, "*.wav")
-                .Select(Path.GetFileName)
-                .Where(n => !string.IsNullOrEmpty(n))
-                .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
-                .Select(n => "file:" + n);
-        }
-        catch
-        {
-            return [];
-        }
-    }
-
     private static bool IsSupportedFile(string path) =>
         path.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) ||
         path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase);
 
+    /// <summary>True for built-in and user file sounds.</summary>
     public static bool IsFileSound(string key) =>
-        key.StartsWith("file:", StringComparison.OrdinalIgnoreCase) ||
+        key.StartsWith("app:", StringComparison.OrdinalIgnoreCase) ||
         key.StartsWith("user:", StringComparison.OrdinalIgnoreCase);
 
-    public static string DisplayName(string key)
+    public static bool IsBuiltIn(string key) =>
+        key.StartsWith("app:", StringComparison.OrdinalIgnoreCase);
+
+    public static string DisplayName(string key) =>
+        IsFileSound(key) ? Path.GetFileNameWithoutExtension(NameOf(key)) : key;
+
+    /// <summary>File name part of a file-sound key. "app:" has 4 chars, "user:" has 5.</summary>
+    private static string NameOf(string key)
     {
-        if (key.StartsWith("sys:", StringComparison.OrdinalIgnoreCase)) return key[4..];
-        if (IsFileSound(key)) return Path.GetFileNameWithoutExtension(key[5..]);
+        if (key.StartsWith("app:", StringComparison.OrdinalIgnoreCase)) return key[4..];
+        if (key.StartsWith("user:", StringComparison.OrdinalIgnoreCase)) return key[5..];
         return key;
     }
 
     private static string? FilePathOf(string key)
     {
         if (!IsFileSound(key)) return null;
-        string name = key[5..];
-        string dir = key.StartsWith("user:", StringComparison.OrdinalIgnoreCase) ? UserDir : MediaDir;
+        string name = NameOf(key);
+        string dir = key.StartsWith("app:", StringComparison.OrdinalIgnoreCase) ? BuiltInDir : UserDir;
+        if (key.StartsWith("app:", StringComparison.OrdinalIgnoreCase)) EnsureBuiltIn();
+
         string path = Path.Combine(dir, name);
         return File.Exists(path) ? path : null;
     }
@@ -134,7 +209,7 @@ public static class SoundService
         if (!key.StartsWith("user:", StringComparison.OrdinalIgnoreCase)) return false;
         try
         {
-            string name = Path.GetFileName(key[5..]);
+            string name = Path.GetFileName(NameOf(key));
             string path = Path.Combine(UserDir, name);
             if (!File.Exists(path)) return false;
             File.Delete(path);
@@ -148,26 +223,16 @@ public static class SoundService
 
     public static void Play(string? key)
     {
-        key = string.IsNullOrEmpty(key) ? DefaultKey : key;
-
-        if (!IsFileSound(key))
-        {
-            StopFilePlayback();
-            switch (key.StartsWith("sys:", StringComparison.OrdinalIgnoreCase) ? key[4..] : "")
-            {
-                case "Asterisk": SystemSounds.Asterisk.Play(); break;
-                case "Beep": SystemSounds.Beep.Play(); break;
-                case "Hand": SystemSounds.Hand.Play(); break;
-                case "Question": SystemSounds.Question.Play(); break;
-                default: SystemSounds.Exclamation.Play(); break;
-            }
-            return;
-        }
+        if (string.IsNullOrEmpty(key) || !IsFileSound(key))
+            key = DefaultKey;
 
         string? path = FilePathOf(key);
         if (path is null)
         {
-            Play(DefaultKey);
+            // Fall back to the default sound; if it is unavailable, do nothing
+            // (there are no system sounds anymore).
+            if (!string.Equals(key, DefaultKey, StringComparison.OrdinalIgnoreCase))
+                Play(DefaultKey);
             return;
         }
 
@@ -177,13 +242,8 @@ public static class SoundService
     /// <summary>Plays a file sound in a seamless loop until Stop()/StopLooping().</summary>
     public static void PlayLooping(string? key)
     {
-        key = string.IsNullOrEmpty(key) ? DefaultKey : key;
-
-        if (!IsFileSound(key))
-        {
-            Play(key);
-            return;
-        }
+        if (string.IsNullOrEmpty(key) || !IsFileSound(key))
+            key = DefaultKey;
 
         string? path = FilePathOf(key);
         if (path is null) return;
@@ -197,7 +257,7 @@ public static class SoundService
 
     /// <summary>
     /// Resolves the duration of a file sound (probe media open on the UI thread).
-    /// Returns null for system sounds, missing files and failures.
+    /// Returns null for missing files and failures.
     /// </summary>
     public static Task<TimeSpan?> GetDurationAsync(string key)
     {
@@ -256,6 +316,7 @@ public static class SoundService
         {
             _media = new MediaPlayer();
             _media.Open(new Uri(path));
+            _media.Volume = Volume;
             if (loop)
             {
                 _looping = true;
@@ -280,32 +341,17 @@ public static class SoundService
     private static void StopFilePlayback()
     {
         _looping = false;
-        if (_media is not null)
+        if (_media is null) return;
+        try
         {
-            try
-            {
-                _media.MediaEnded -= OnMediaEnded;
-                _media.Stop();
-                _media.Close();
-            }
-            catch
-            {
-                // Ignore.
-            }
-            _media = null;
+            _media.MediaEnded -= OnMediaEnded;
+            _media.Stop();
+            _media.Close();
         }
-
-        if (_player is not null)
+        catch
         {
-            try
-            {
-                _player.Stop();
-            }
-            catch
-            {
-                // Ignore.
-            }
-            _player = null;
+            // Ignore.
         }
+        _media = null;
     }
 }

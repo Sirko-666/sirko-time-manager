@@ -3,7 +3,7 @@
 > 🌐 **This README is available in three languages:**
 > 🇬🇧 [English](#english) · 🇺🇦 [Українська](#українська) · 🇷🇺 [Русский](#русский)
 >
-> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.2.4** · Windows 10/11
+> **Developer:** Serhii Sirenko (Sirko) · Version **0.1.3** · Windows 10/11
 
 ---
 
@@ -17,7 +17,7 @@ A minimalistic time manager for Windows in a “dark paper” style: countdown t
 |---|---|
 **Countdown** | iOS-style dial (mouse wheel or drag), Sleep / Shutdown action, Pause / Resume, saved timers
 **Scheduled** | Sleep / Shutdown at an exact time of day; if that time already passed — tomorrow
-**Alarms** | Weekday repeat, label, any sound (system / Windows Media / own WAV·MP3), ring pattern: 1 minute, then 15 s every 5 minutes until stopped
+**Alarms** | Weekday repeat, label, built-in sounds or your own WAV·MP3, ring pattern: 1 minute, then 15 s every 5 minutes until stopped
 **App timers** | App cards: launch & close by schedule, 3 toggles (master / start / stop), drag-to-reorder, multi-delete
 **Settings** | Interface language (Ukrainian / English / Russian), dark / light theme, start with Windows, and **uninstall the app** right from the tab (removes files, shortcuts, autostart and data with a danger-styled confirmation)
 
@@ -79,7 +79,7 @@ Free for personal use. Selling and paid redistribution are forbidden. See `LICEN
 |---|---|
 **Зворотний відлік** | Циферблат у стилі iOS (колесо миші або перетягування), Сон / Вимкнення, Пауза / Продовжити, збережені таймери
 **За розкладом** | Сон / Вимкнення на точну добу; якщо час минув — на наступний день
-**Будильники** | Повтор у дні тижня, назва, будь-який звук (системні / Windows Media / свої WAV·MP3), цикл: 1 хвилину, далі кожні 5 хвилин до «Стоп»
+**Будильники** | Повтор у дні тижня, назва, вбудовані звуки або свої WAV·MP3, цикл: 1 хвилину, далі кожні 5 хвилин до «Стоп»
 **Таймер застосунків** | Картки застосунків: запуск і вимкнення за розкладом, 3 перемикачі (майстерний/запуск/вимкнення), drag-сортування, масове видалення
 **Налаштування** | Мова (укр / eng / рус), темна / світла тема, автозапуск із Windows і **видалення застосунку** зі вкладки (файли, ярлики, автозапуск, дані — з підтвердженням)
 
@@ -113,7 +113,7 @@ STM також з'являється в **«Параметри → Програ�
 |---|---|
 **Обратный отсчёт** | Циферблат в стиле iOS (колесо мыши или перетаскивание), Сон / Выключение, Пауза / Продолжить, сохранённые таймеры
 **По расписанию** | Сон / Выключение на точное время суток; если время прошло — на следующий день
-**Будильники** | Повтор по дням недели, название, любой звук (системные / Windows Media / свои WAV·MP3), цикл: 1 минута, затем каждые 5 минут до «Стоп»
+**Будильники** | Повтор по дням недели, название, встроенные звуки или свои WAV·MP3, цикл: 1 минута, затем каждые 5 минут до «Стоп»
 **Таймер приложений** | Карточки приложений: запуск и закрытие по времени, 3 переключателя (мастер/запуск/выключение), перетаскивание, массовое удаление
 **Настройки** | Язык (укр / eng / рус), тёмная / светлая темы, автозапуск с Windows и **удаление приложения** прямо из вкладки (файлы, ярлыки, автозапуск, данные — с подтверждением)
 
@@ -138,6 +138,12 @@ STM также появляется в **«Параметры → Приложе
 ---
 
 ## Changelog
+
+### v0.1.3
+- **Own built-in sound library** (12 bundled sounds) instead of Windows system/Media sounds; “Add sound…” still imports your own WAV/MP3.
+- **Alarm volume slider** (in Settings and in the sound picker, linked), default 60%; relative to the Windows volume.
+- **Cyclic alarm repeat** (e.g. 5 working days / 2 days off) with a start date; repeat modes: once · weekdays · cycle.
+- About “Features” rewritten into readable paragraphs (3 languages).
 
 ### v0.1.2.4
 - Update notification is now a small toast near the tray (shown on every launch while an update is available, unless the version is skipped).

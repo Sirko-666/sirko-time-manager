@@ -4,7 +4,7 @@
         xmlns:ctrl="clr-namespace:TimerApp.Controls"
         Title="{DynamicResource L_EditAlarm}"
         Width="340"
-        SizeToContent="Height" MaxHeight="620"
+        SizeToContent="Height" MaxHeight="640"
         WindowStyle="None" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent"
         ShowInTaskbar="False"
@@ -34,18 +34,42 @@
             <ctrl:TimeDial x:Name="Dial" LargeMode="True" HorizontalAlignment="Center" />
 
             <!-- Repeat -->
-            <TextBlock Text="{DynamicResource L_AlarmRepeat}"
-                       Foreground="{DynamicResource MutedTextBrush}"
-                       FontSize="12" Margin="2,16,0,8" />
-            <UniformGrid Rows="1" Columns="7">
-                <ToggleButton x:Name="Day0" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayMon}" Margin="0,0,4,0" />
-                <ToggleButton x:Name="Day1" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayTue}" Margin="0,0,4,0" />
-                <ToggleButton x:Name="Day2" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayWed}" Margin="0,0,4,0" />
-                <ToggleButton x:Name="Day3" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayThu}" Margin="0,0,4,0" />
-                <ToggleButton x:Name="Day4" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayFri}" Margin="0,0,4,0" />
-                <ToggleButton x:Name="Day5" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DaySat}" Margin="0,0,4,0" />
-                <ToggleButton x:Name="Day6" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DaySun}" />
+            <Grid Margin="2,16,0,8">
+                <TextBlock Text="{DynamicResource L_AlarmRepeat}"
+                           Foreground="{DynamicResource MutedTextBrush}"
+                           FontSize="12" VerticalAlignment="Center" />
+                <ToggleButton x:Name="OnceToggle" Content="{DynamicResource L_DaysOnce}"
+                              Style="{StaticResource DayToggleStyle}"
+                              HorizontalAlignment="Right"
+                              Checked="OnOnceChanged" Unchecked="OnOnceChanged" />
+            </Grid>
+            <UniformGrid x:Name="WeekdayGrid" Rows="1" Columns="7">
+                <ToggleButton x:Name="Day0" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayMon}" Margin="0,0,4,0" Checked="OnDayChanged" Unchecked="OnDayChanged" />
+                <ToggleButton x:Name="Day1" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayTue}" Margin="0,0,4,0" Checked="OnDayChanged" Unchecked="OnDayChanged" />
+                <ToggleButton x:Name="Day2" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayWed}" Margin="0,0,4,0" Checked="OnDayChanged" Unchecked="OnDayChanged" />
+                <ToggleButton x:Name="Day3" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayThu}" Margin="0,0,4,0" Checked="OnDayChanged" Unchecked="OnDayChanged" />
+                <ToggleButton x:Name="Day4" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DayFri}" Margin="0,0,4,0" Checked="OnDayChanged" Unchecked="OnDayChanged" />
+                <ToggleButton x:Name="Day5" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DaySat}" Margin="0,0,4,0" Checked="OnDayChanged" Unchecked="OnDayChanged" />
+                <ToggleButton x:Name="Day6" Style="{StaticResource DayToggleStyle}" Content="{DynamicResource L_DaySun}" Checked="OnDayChanged" Unchecked="OnDayChanged" />
             </UniformGrid>
+
+            <!-- Cyclic repeat -->
+            <Grid Margin="2,14,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton x:Name="CycleSwitch" Grid.Column="0"
+                              Style="{StaticResource SwitchStyle}" VerticalAlignment="Center"
+                              Checked="OnCycleSwitchChanged" Unchecked="OnCycleSwitchChanged" />
+                <TextBlock Grid.Column="1" Text="{DynamicResource L_AlarmCycle}"
+                           Foreground="{DynamicResource InkBrush}" FontSize="13"
+                           VerticalAlignment="Center" Margin="10,0,8,0" />
+                <Button x:Name="CycleButton" Grid.Column="2" Content="5/2"
+                        Style="{StaticResource GhostButtonStyle}" VerticalAlignment="Center"
+                        Click="OnCycleButtonClick" />
+            </Grid>
 
             <!-- Label -->
             <TextBlock Text="{DynamicResource L_AlarmLabel}"

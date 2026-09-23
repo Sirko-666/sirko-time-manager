@@ -91,11 +91,14 @@ public partial class MainWindow : Window
         LangEn.IsChecked = LocalizationService.Current == AppLanguage.English;
         LangRu.IsChecked = LocalizationService.Current == AppLanguage.Russian;
         AutostartSwitch.IsChecked = AutostartService.IsEnabled();
+        VolumeSlider.Value = SoundService.Volume;
         _initializing = false;
 
         CreateTrayIcon();
         InitializeSize();
         InitializeUpdates();
+
+        SoundService.VolumeChanged += OnSoundVolumeChanged;
 
         Loaded += (_, _) => ApplyTitleBarTheme();
     }
@@ -140,6 +143,20 @@ public partial class MainWindow : Window
     {
         if (_initializing) return;
         AutostartService.SetEnabled(AutostartSwitch.IsChecked == true);
+    }
+
+    private void OnVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (_initializing) return;
+        SoundService.Volume = e.NewValue;
+    }
+
+    private void OnSoundVolumeChanged(double value)
+    {
+        if (Math.Abs(VolumeSlider.Value - value) < 0.0005) return;
+        _initializing = true;
+        VolumeSlider.Value = value;
+        _initializing = false;
     }
 
     private void OnUninstallAppClick(object sender, RoutedEventArgs e)
@@ -956,7 +973,9 @@ public partial class MainWindow : Window
     private string DescribeAlarm(Alarm alarm)
     {
         string days;
-        if (!alarm.IsRepeating)
+        if (alarm.Mode == AlarmRepeatMode.Cycle)
+            days = $"{alarm.CycleWorkDays}/{alarm.CycleRestDays}";
+        else if (alarm.Mode == AlarmRepeatMode.Once)
             days = LocalizationService.Get("L_DaysOnce");
         else if (alarm.Days.All(d => d))
             days = LocalizationService.Get("L_DaysEveryday");

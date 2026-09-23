@@ -306,6 +306,15 @@
                                      Checked="OnThemeRadioChecked" />
                     </StackPanel>
 
+                    <TextBlock Text="{DynamicResource L_SettingsVolume}"
+                               Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="12" Margin="2,20,0,8" />
+                    <ctrl:VolumeSlider x:Name="VolumeSlider"
+                            Style="{StaticResource VolumeSliderStyle}"
+                            Width="180" HorizontalAlignment="Left"
+                            Minimum="0" Maximum="1"
+                            ValueChanged="OnVolumeChanged" />
+
                     <TextBlock Text="{DynamicResource L_SettingsAutostart}"
                                Foreground="{DynamicResource MutedTextBrush}"
                                FontSize="12" Margin="2,20,0,8" />
@@ -423,6 +432,15 @@
                             <TextBlock Text="{DynamicResource L_TabSettings}" FontSize="14" FontWeight="SemiBold" />
                         </Expander.Header>
                         <TextBlock Text="{DynamicResource L_AboutSettings}"
+                                   Foreground="{DynamicResource BodyTextBrush}"
+                                   FontSize="13" TextWrapping="Wrap" />
+                    </Expander>
+
+                    <Expander Style="{StaticResource AboutBlockStyle}">
+                        <Expander.Header>
+                            <TextBlock Text="{DynamicResource L_AboutUpdatesTitle}" FontSize="14" FontWeight="SemiBold" />
+                        </Expander.Header>
+                        <TextBlock Text="{DynamicResource L_AboutUpdates}"
                                    Foreground="{DynamicResource BodyTextBrush}"
                                    FontSize="13" TextWrapping="Wrap" />
                     </Expander>

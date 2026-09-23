@@ -17,12 +17,9 @@ public partial class AlarmRingWindow : Window
     private static readonly TimeSpan LongSilence = TimeSpan.FromMinutes(5);
 
     private static readonly TimeSpan ProbeTimeout = TimeSpan.FromSeconds(3);
-    private const int ReplayIntervalSeconds = 2;
 
     private readonly string _soundKey;
-    private readonly bool _isFileSound;
     private readonly DispatcherTimer _ringTimer;
-    private readonly DispatcherTimer? _replayTimer;
     private DispatcherTimer? _repeatTimer;
     private DispatcherTimer? _burstTimer;
     private TimeSpan? _duration;
@@ -32,31 +29,23 @@ public partial class AlarmRingWindow : Window
         InitializeComponent();
         TimeText.Text = $"{alarm.Hour:00}:{alarm.Minute:00}";
         LabelText.Text = alarm.Label;
-        _soundKey = alarm.SoundKey;
-        _isFileSound = SoundService.IsFileSound(_soundKey);
+
+        // Only file sounds exist now; any legacy key falls back to the default.
+        _soundKey = SoundService.IsFileSound(alarm.SoundKey) ? alarm.SoundKey : SoundService.DefaultKey;
 
         _ringTimer = new DispatcherTimer { Interval = RingDuration };
         _ringTimer.Tick += OnRingElapsed;
-
-        if (!_isFileSound)
-        {
-            _replayTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(ReplayIntervalSeconds) };
-            _replayTimer.Tick += (_, _) => SoundService.Play(_soundKey);
-        }
 
         Loaded += async (_, _) => await StartAsync();
     }
 
     private async Task StartAsync()
     {
-        if (_isFileSound)
+        _duration = await ProbeDurationAsync();
+        if (_duration is { } length && length > LongSoundThreshold)
         {
-            _duration = await ProbeDurationAsync();
-            if (_duration is { } length && length > LongSoundThreshold)
-            {
-                PlayLongSound();
-                return;
-            }
+            PlayLongSound();
+            return;
         }
 
         StartPlayback();
@@ -80,22 +69,9 @@ public partial class AlarmRingWindow : Window
         return ReferenceEquals(done, probe) ? probe.Result : null;
     }
 
-    private void StartPlayback()
-    {
-        if (_isFileSound)
-            SoundService.PlayLooping(_soundKey);
-        else
-        {
-            SoundService.Play(_soundKey);
-            _replayTimer?.Start();
-        }
-    }
+    private void StartPlayback() => SoundService.PlayLooping(_soundKey);
 
-    private void StopPlayback()
-    {
-        _replayTimer?.Stop();
-        SoundService.Stop();
-    }
+    private void StopPlayback() => SoundService.Stop();
 
     private void OnRingElapsed(object? sender, EventArgs e)
     {
@@ -126,7 +102,6 @@ public partial class AlarmRingWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         _ringTimer.Stop();
-        _replayTimer?.Stop();
         _repeatTimer?.Stop();
         _burstTimer?.Stop();
         SoundService.Stop();

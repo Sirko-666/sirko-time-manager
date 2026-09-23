@@ -39,6 +39,11 @@
     <sys:String x:Key="L_Apply">Apply</sys:String>
     <sys:String x:Key="L_AddSound">Add sound…</sys:String>
     <sys:String x:Key="L_AlarmRepeat">Repeat</sys:String>
+    <sys:String x:Key="L_AlarmCycle">Cyclic repeat</sys:String>
+    <sys:String x:Key="L_CycleTitle">Cyclic repeat</sys:String>
+    <sys:String x:Key="L_CycleWork">Work</sys:String>
+    <sys:String x:Key="L_CycleRest">Off</sys:String>
+    <sys:String x:Key="L_CycleStart">Cycle start date</sys:String>
     <sys:String x:Key="L_AlarmSave">Save</sys:String>
     <sys:String x:Key="L_DaysEveryday">Every day</sys:String>
     <sys:String x:Key="L_DaysOnce">Once</sys:String>
@@ -77,6 +82,7 @@
     <sys:String x:Key="L_Delete">Delete</sys:String>
 
     <sys:String x:Key="L_SettingsLanguage">Language</sys:String>
+    <sys:String x:Key="L_SettingsVolume">Alarm volume</sys:String>
     <sys:String x:Key="L_SettingsAutostart">Start with Windows</sys:String>
     <sys:String x:Key="L_LanguageUk">Українська</sys:String>
     <sys:String x:Key="L_LanguageEn">English</sys:String>
@@ -91,13 +97,15 @@
 
     <sys:String x:Key="L_AboutVersion">Version</sys:String>
     <sys:String x:Key="L_AboutDeveloper">Developer</sys:String>
-    <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) is a compact timer for Windows: countdowns, scheduled actions, alarms, application timers and handy settings. Minimal interface, black &amp; white themes, three languages.</sys:String>
+    <sys:String x:Key="L_AboutIntro">Sirko Time Manager (STM) is a compact timer for Windows: countdowns, scheduled actions, alarms, application timers and handy settings. Minimal interface, black &amp; white themes, three languages. STM lives in the tray: closing the window only hides it — timers and alarms keep running. For a full exit, right-click the tray icon and choose “Close app”.</sys:String>
     <sys:String x:Key="L_AboutFeaturesTitle">Features</sys:String>
-    <sys:String x:Key="L_AboutCountdown">An iOS-style dial: scroll the mouse wheel or drag over hours or minutes to set the time. On the right pick an action — Sleep or Shutdown. “Start” begins the countdown; “Pause/Resume” and “Reset” are available while running. Keep durations via “Save” and apply them from “Saved” (multi-select deletion is supported). When the countdown ends, the chosen action runs immediately.</sys:String>
-    <sys:String x:Key="L_AboutSchedule">Schedule Sleep or Shutdown for an exact time of day. If that time already passed today, the next occurrence (tomorrow) is used. After scheduling, the dial locks and shows a status line; “Cancel” unarms it. Frequently used times can be saved and picked from “Saved”.</sys:String>
-    <sys:String x:Key="L_AboutAlarms">Create alarms: dial, weekday repeat and an optional label. The row switch enables or disables each alarm; one-shot alarms turn themselves off after firing. Click a row to edit, use “Delete” inside the editor. Every alarm can use its own sound: the speaker icon opens the sound list (system sounds plus Windows Media wavs), “Add sound…” imports a WAV/MP3 and the cross removes imported ones. When an alarm fires the sound plays for a minute, then repeats every 5 minutes (long tracks play fully) until you press “Stop”.</sys:String>
-    <sys:String x:Key="L_AboutApps">Add apps from the installed list or browse for an .exe/.lnk manually. Each card holds the icon, the name, three toggles (master, start, stop) and two dials — the launch and close time of the program. A disabled card is dimmed and runs nothing. Drag cards (hold LMB) to reorder — the order persists. “Select” enables multi-delete with checkboxes: a “Select all” switch and “Delete selected” with confirmation; the trash icon deletes a single card with confirmation.</sys:String>
-    <sys:String x:Key="L_AboutSettings">Language: Ukrainian, English, Russian. Theme: dark or light. “Start with Windows” writes an entry into the current-user Run registry key so the app starts with the system. At the bottom of the tab — the “Uninstall app” button: complete removal of files, shortcuts, autostart and data with a confirmation. All settings persist automatically and are restored after a restart.</sys:String>
+    <sys:String x:Key="L_AboutCountdown" xml:space="preserve">Set a duration on the dial, then choose what happens when the time is up.&#x0A;&#x0A;Spin the hours or minutes wheel with the mouse wheel, or hold the left mouse button and drag — the digits glide smoothly and the value stops in the centre.&#x0A;&#x0A;On the right pick the action — Sleep or Shutdown.&#x0A;&#x0A;“Start” begins the countdown; while it runs use “Pause/Resume” or “Reset”.&#x0A;&#x0A;Keep useful durations with “Save” and apply them from “Saved” (there you can delete several at once).&#x0A;&#x0A;When the countdown reaches zero, the action runs immediately.</sys:String>
+    <sys:String x:Key="L_AboutSchedule" xml:space="preserve">Schedule an action for an exact time of day.&#x0A;&#x0A;Pick a time and choose Sleep or Shutdown.&#x0A;&#x0A;If that time has already passed today, STM schedules it for tomorrow.&#x0A;&#x0A;After arming, the dial is locked and a status line is shown; “Cancel” disarms it.&#x0A;&#x0A;Save frequently used times and pick them from “Saved”.</sys:String>
+    <sys:String x:Key="L_AboutAlarms" xml:space="preserve">Create an alarm with the dial and, optionally, a label.&#x0A;Repeat — one of three ways:&#x0A;&#x0A;“Once” — fires a single time, then turns itself off.&#x0A;&#x0A;Weekdays — pick the days of the week.&#x0A;&#x0A;“Cyclic repeat” — a cycle such as 5 working days and 2 days off: set the number of working and rest days and the date the first working day starts; the alarm then fires only on the working days of the repeating cycle.&#x0A;Other:&#x0A;&#x0A;The row switch enables or disables an alarm; click a row to edit it (“Delete” inside the editor removes it).&#x0A;&#x0A;Sound: the speaker icon opens the list of built-in sounds; “Add sound…” imports your own WAV/MP3 (the cross removes imported ones).&#x0A;&#x0A;The same window has the alarm-volume slider, shared with Settings.&#x0A;&#x0A;When it fires, the sound plays for a minute, then repeats as 15-second bursts every 5 minutes (tracks longer than 45 seconds play fully once every 5 minutes) until you press “Stop”.</sys:String>
+    <sys:String x:Key="L_AboutApps" xml:space="preserve">Add an app from the installed list or browse for an .exe/.lnk manually.&#x0A;&#x0A;A card shows the icon, the name, three toggles (master, start, stop) and two dials — the launch and close time of the program.&#x0A;&#x0A;A disabled card is dimmed and runs nothing.&#x0A;&#x0A;Drag cards (hold LMB) to reorder — the order is kept.&#x0A;&#x0A;“Select” turns on multi-delete: checkboxes, “Select all” and “Delete selected” with confirmation; the trash icon deletes a single card with confirmation.</sys:String>
+    <sys:String x:Key="L_AboutSettings" xml:space="preserve">Interface and behaviour.&#x0A;&#x0A;Language: Ukrainian, English, Russian.&#x0A;&#x0A;Theme: dark or light.&#x0A;&#x0A;“Alarm volume” slider — loudness of STM’s own sounds, relative to the Windows volume (if the system volume is muted, there is no sound).&#x0A;&#x0A;“Start with Windows” — STM launches together with the system, hidden in the tray.&#x0A;&#x0A;“Check for updates” — looks for a newer version.&#x0A;&#x0A;“Uninstall app” (at the bottom) — removes STM completely (files, shortcuts, autostart and your data) after a confirmation.&#x0A;All settings are saved automatically.</sys:String>
+    <sys:String x:Key="L_AboutUpdatesTitle">Updates</sys:String>
+    <sys:String x:Key="L_AboutUpdates" xml:space="preserve">STM checks the project page on GitHub for updates once an hour.&#x0A;&#x0A;When a newer version exists, a small notification appears near the tray, the Settings button becomes a highlighted “New version available”, and a block appears in this tab.&#x0A;&#x0A;Install it with “Update”, or “Skip this version” to stop being offered it.&#x0A;&#x0A;During an update STM closes and restarts, keeping all timers, alarms, sounds and settings.</sys:String>
 
     <sys:String x:Key="L_UninstallDoneText">The application has been completely removed.</sys:String>
     <sys:String x:Key="L_UninstallDoneSub">Click anywhere to close.</sys:String>

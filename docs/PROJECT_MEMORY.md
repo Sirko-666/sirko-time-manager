@@ -21,11 +21,14 @@
 - Theme switch rebuilds lists (FindResource caches brushes in code-created elements).
 - TimeDial rework (v0.1.2.1): each wheel keeps a fractional position; visual rule is formula-based (`size = MinSize + (CenterSize-MinSize)*(1 - min(1, d/(VisibleOffsets+1)))`, `opacity` fades to 0 past ±1 row) and independent of `VisibleOffsets`; wheel and LMB-drag both supported; two-stage start ramp (3%→30% over 0.18 s, →100% over 1 s), no end inertia; centering uses ease-out. Visible pill removed; center digit is bright `InkBrush`; countdown/schedule dial frames removed in XAML.
 - Custom install dirs: installer checks write access and relaunches elevated with `--dir "..."` when needed.
+- Sounds (v0.1.3): only two key kinds — `app:<file>` (built-in, embedded as `EmbeddedResource` under `Assets\Sounds`, extracted to `%AppData%\TimerApp\Sounds\BuiltIn`) and `user:<file>` (imported into `...\Sounds`). System/Windows-Media sounds removed; legacy `sys:`/`file:` keys fall back to the default `app:Pi-li-li-li.mp3`. Alarm volume (0..1, default 0.6) lives in `sound.json` (separate from settings.json), is relative to the Windows volume, and all sliders stay in sync via `SoundService.VolumeChanged`.
+- Alarms (v0.1.3): repeat modes `Once` / `Weekdays` / `Cycle` (`Alarm.RepeatMode`, nullable for migration). Cycle = N working + M rest days anchored at `CycleStartDate` (day 0 = first working day); firing is decided by `Alarm.MatchesDate(date)`.
 - Full installer = 221 MB because double runtime (installer + self-contained app) — accepted trade-off.
 
 ## Constraints
 - CI on owner's box: Windows PowerShell 5.1 only (no ternary, no strict-mode JSON réunions).
 - Reading text files without explicit UTF-8 corrupted localization once — always encode explicitly.
+- XAML normalizes whitespace in element content (newlines/tabs become spaces) — multi-line resource strings need `xml:space="preserve"`.
 - TimerApp.exe locks itself while running — must stop before rebuild.
 - Installer unsigned; SmartScreen warning is expected.
 - App lock: single instance via `local\TimerApp-STM-SingleInstance` mutex; second launch signals restore.
@@ -56,7 +59,7 @@
 
 ## Current State
 - Feature backlog: `docs\ROADMAP.md` (owner's ideas, numbered). Item #1 (in-app updates) implemented; item #2 (dial UX/visual) implemented.
-- Version **0.1.2.4** — releases published: **v0.1.2.2** (dial rework + in-app update), **v0.1.2.3** (installer button fix), **v0.1.2.4** (update toast + Settings/About update UI). csproj `<Version>` in both projects; app title/About/installer welcome/Uninstall `DisplayVersion` show 4 parts when Revision > 0.
+- Version **0.1.3** — releases published: **v0.1.2.2** (dial rework + in-app update), **v0.1.2.3** (installer button fix), **v0.1.2.4** (update toast + Settings/About update UI), **v0.1.3** (own sound library, alarm volume, cyclic repeat). csproj `<Version>` in both projects; app title/About/installer welcome/Uninstall `DisplayVersion` show 4 parts when Revision > 0.
 - In-app updater: `Services\UpdateService.cs` (GitHub `releases/latest`, notes sections `[uk]/[en]/[ru]`, .NET 8 runtime probe), `UpdateStore` (`%AppData%\TimerApp\update.json`, separate from settings.json), hourly silent check + one silent check 4 s after start. Notification is a custom `ToastWindow` near the tray (bottom-right, auto-closes 8 s, click → About) — shown on **every launch** while an update is available **unless the version is skipped**; `NotifyIcon.ShowBalloonTip` was unreliable on Win10/11. Settings button switches to a highlighted "New version available"; About block shows Update/Skip buttons. Update runs the normal installer with `--dir "<install dir>"`; installer closes the running app before copying and skips `settings.json` when it exists.
 - csproj `<Version>` в обоих проектах — единый источник версии (title/about/installer welcome/Uninstall registry).
 - Полноценный uninstaller: инсталлер пишет `HKCU\...\Uninstall\STM` (DisplayName/Version/Publisher/Icon/Size/UninstallString=`TimerApp.exe --uninstall`); приложение в режиме `--uninstall` показывает подтверждение, чистит всё и удаляет запись.
